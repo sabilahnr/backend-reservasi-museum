@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('foto_ktp');
             $table->string('foto_kia');
             $table->string('foto_paspor');
+            $table->string('foto_paspor');
             $table->string('file');
             $table->timestamps();
         });
