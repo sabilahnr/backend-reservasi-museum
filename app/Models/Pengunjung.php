@@ -12,16 +12,13 @@ class Pengunjung extends Model
     protected $fillable = [
         'nama',
         'kota',
-        'negara',
         'phone',
         'jumlah',
         'museum',
         'kategori',
-        'jadwal',
-        'foto_ktp',
-        'foto_kia',
-        'foto_ktm',
-        'foto_paspor',
-        'file',
+        'tanggal',
+        'foto',
+        'harga',
+        'pembayaran',
     ];
 }
