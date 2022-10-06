@@ -17,15 +17,19 @@ return new class extends Migration
            
             $table->id();
             $table->string('nama');
-            $table->string('kota');
-            $table->string('phone')->nullable();
-            $table->string('jumlah');
             $table->enum('museum',['museum_keris','museum_radya_pustaka']);
             $table->enum('kategori',['umum','mahasiswa', 'pelajar', 'rombongan_umum', 'rombongan_pelajar', 'wna']);
+            $table->string('phone');
+            $table->string('kota');
+            $table->string('negara')->nullable();
+            $table->string('jumlah');
+            $table->string('harga_awal');
+            $table->string('potongan_harga')->nullable();
+            $table->string('harga_akhir')->nullable();
             $table->string('tanggal');
-            $table->string('foto');
-            $table->string('harga');
+            $table->string('attachment')->nullable();
             $table->string('pembayaran');
+            $table->string('id_admin')->nullable();
             $table->timestamps();
         });
     }

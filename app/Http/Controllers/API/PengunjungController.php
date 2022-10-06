@@ -17,11 +17,14 @@ class PengunjungController extends Controller
         'negara'=>'nullable|max:191',
         'phone'=>'required|max:191',
         'jumlah'=>'required|max:191',
+        // 'harga_awal'=>'required|max:191',
+        // 'potongan_harga'=>'required|max:191',
+        // 'harga_akhir'=>'required|max:191',
         'museum'=>'required|max:191',
         'kategori'=>'required|max:191',
         'tanggal'=>'required|max:191',
-        'foto.*'=>'required|image|mimes:jpg,png,jpeg,gif,svg',
-        'attachment'=>'nullable|max:191',
+        'attachment.*'=>'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+        // 'pembayaran'=>'required|max:191',
     ],[
         'nama.required' => 'Kolom nama wajib diisi',
         'kota.required' => 'Kolom kota wajib diisi',
@@ -59,14 +62,23 @@ class PengunjungController extends Controller
         $pengunjung->museum = $request->input('museum'); 
         $pengunjung->kategori = $request->input('kategori'); 
         $pengunjung->tanggal = $request->input('tanggal'); 
-        $pengunjung->foto = $request->input('foto'); 
-        $pengunjung->harga = $request->input('harga');
+        $pengunjung->attachment = $request->input('attachment'); 
+        $pengunjung->harga_awal = $request->input('harga_awal');
         $pengunjung->pembayaran = $request->input('pembayaran'); 
         $pengunjung->save();
         
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil menambahkan data pengunjung'
+        ]);
+    }
+
+    public function show()
+    {
+        $pengunjung = Pengunjung::all();
+        return response()->json([
+            'status'=> 200,
+            'pengunjung'=>$pengunjung,
         ]);
     }
 }
