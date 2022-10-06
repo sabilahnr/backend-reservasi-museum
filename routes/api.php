@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/validasi-pengunjung',[PengunjungController::class, 'validasi']);
 Route::post('/add-pengunjung',[PengunjungController::class, 'store']);
+Route::get('/pengunjung',[PengunjungController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
