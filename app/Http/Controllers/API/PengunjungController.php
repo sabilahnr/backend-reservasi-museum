@@ -15,7 +15,7 @@ class PengunjungController extends Controller
         'nama'=>'required|max:191',
         'kota'=>'required|max:191',
         'negara'=>'nullable|max:191',
-        'phone'=>'required|max:191',
+        'phone'=>'required|min:10|max:13',
         'jumlah'=>'required|max:191',
         // 'harga_awal'=>'required|max:191',
         // 'potongan_harga'=>'required|max:191',
