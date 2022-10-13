@@ -17,4 +17,9 @@ class harga extends Model
 
     ];
     protected $guarded = [];
+
+    
+
+   
+
 }

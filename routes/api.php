@@ -25,6 +25,7 @@ Route::get('/pengunjung',[PengunjungController::class, 'show']);
 Route::get('/show_museum',[MuseumController::class, 'show']);
 Route::get('/show_category/{museumId}',[KategoriController::class, 'show']);
 Route::get('/show_harga/{id_category}',[HargaController::class, 'show']);
+// Route::post('/show_data/{id_category}',[PengunjungController::class, 'show_data']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
