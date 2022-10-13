@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\museum;
 use App\Models\Pengunjung;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -80,5 +81,33 @@ class PengunjungController extends Controller
             'status'=> 200,
             'pengunjung'=>$pengunjung,
         ]);
+    }
+
+    public function show_data(Request $request)
+    {
+        $id_museum = $request->input('id_museum');
+        $id_category = $request->input('id_category');
+
+        // $harga = harga::with('kategori')
+        //                 ->where('id_kategori',$id_category)
+        //                 ->get();
+
+        $data = museum::where('id', $id_museum)
+                        ->join
+                        ->get();
+    
+    
+        if($data){
+            return response()->json([
+                'status'=> 200,
+                'data'=>$data,
+                ]);
+        }else{
+            return response()->json([
+                'status'=> 300,
+                'message'=>'ga ada',
+                ]);
+        }
+    
     }
 }

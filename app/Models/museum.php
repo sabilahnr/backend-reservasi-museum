@@ -9,8 +9,16 @@ class museum extends Model
 {
     use HasFactory;
     protected $table = 'museum';
+    
     protected $fillable =[
-        'nama',
+        'nama_museum',
 
     ];
+
+    public function kategori(){
+        return $this->hasOne(kategori::class,'id_kategori');
+    }
+    public function harga(){
+        return $this->hasOne(harga::class,'id','');
+    }
 }
