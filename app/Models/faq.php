@@ -5,21 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class harga extends Model
+class faq extends Model
 {
     use HasFactory;
-    protected $table = 'harga';
+    protected $table = 'faq';
     protected $fillable =[
-        'id_kategori',
-        'hari_biasa',
-        'hari_libur',
-        
-
+        'answer',
+        'question',
     ];
-    protected $guarded = [];
-
-    
-
-   
-
 }

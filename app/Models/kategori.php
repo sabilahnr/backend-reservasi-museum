@@ -12,7 +12,11 @@ class kategori extends Model
     protected $table = 'kategori';
     protected $fillable =[
         'id_museum',
-        'nama',
+        'nama_kategori',
 
     ];
+
+    // public function museum(){
+    //     return $this->belongsTo(museum::class,'id_museum');
+    // }
 }

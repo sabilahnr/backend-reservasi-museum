@@ -26,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(kategori::class);
         $this->call(museum::class);
         $this->call(SeederHarga::class);
+        $this->call(SeederFAQ::class);
     }
 }
