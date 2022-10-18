@@ -63,7 +63,7 @@ class PengunjungController extends Controller
         $pengunjung->kategori = $request->input('kategori'); 
         $pengunjung->tanggal = $request->input('tanggal'); 
         $pengunjung->attachment = $request->input('attachment'); 
-        $pengunjung->harga_awal = $request->input('harga_awal');
+        $pengunjung->harga_awal = 10000;
         $pengunjung->pembayaran = $request->input('pembayaran'); 
         $pengunjung->save();
         
