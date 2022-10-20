@@ -23,11 +23,11 @@ class museum extends Seeder
 
         ModelsMuseum::create([
             'id' => 1,
-            'nama_museum' => 'museum keris nusantara',
+            'nama_museum' => 'Museum Keris Nusantara',
         ]);
         ModelsMuseum::create([
             'id' => 2,
-            'nama_museum' => 'museum radya pustaka',
+            'nama_museum' => 'Museum Radya Pustaka',
         ]);
     }
 }

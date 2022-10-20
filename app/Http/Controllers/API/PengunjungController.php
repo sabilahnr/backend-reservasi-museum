@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\harga;
+use App\Models\kategori;
 use App\Models\museum;
 use App\Models\Pengunjung;
 use Illuminate\Http\Request;
@@ -18,12 +20,13 @@ class PengunjungController extends Controller
         'negara'=>'nullable|max:191',
         'phone'=>'required|min:10|max:13',
         'jumlah'=>'required|max:191',
+        'foto.*'=>'nullable|mimes:application/pdf',
         // 'harga_awal'=>'required|max:191',
         // 'potongan_harga'=>'required|max:191',
         // 'harga_akhir'=>'required|max:191',
         'museum'=>'required|max:191',
         'kategori'=>'required|max:191',
-        'tanggal'=>'required|max:191',
+        'tanggal'=>'required|max:191',       
         'attachment.*'=>'nullable|image|mimes:jpg,png,jpeg,gif,svg',
         // 'pembayaran'=>'required|max:191',
     ],[
@@ -49,12 +52,21 @@ class PengunjungController extends Controller
         ]);
     }
 
+    // return response()->json([
+    //             'status'=> 200,
+    //             'foto'=>$request->get('foto'),
+    //         ]);
+
+
    }
    
    
    
     public function store(Request $request)
-    {
+    {  
+
+
+
         $pengunjung = new Pengunjung;
         $pengunjung->nama = $request->input('nama'); 
         $pengunjung->kota = $request->input('kota'); 
@@ -63,10 +75,11 @@ class PengunjungController extends Controller
         $pengunjung->museum = $request->input('museum'); 
         $pengunjung->kategori = $request->input('kategori'); 
         $pengunjung->tanggal = $request->input('tanggal'); 
-        $pengunjung->attachment = $request->input('attachment'); 
+        $pengunjung->attachment = $request->input('foto'); 
         $pengunjung->harga_awal = $request->input('harga_awal');
         $pengunjung->pembayaran = $request->input('pembayaran'); 
         $pengunjung->save();
+
         
         return response()->json([
             'status' => 200,
@@ -83,17 +96,17 @@ class PengunjungController extends Controller
         ]);
     }
 
-    public function show_data(Request $request)
+    public function show_data($id_category)
     {
-        $id_museum = $request->input('id_museum');
-        $id_category = $request->input('id_category');
 
         // $harga = harga::with('kategori')
         //                 ->where('id_kategori',$id_category)
         //                 ->get();
 
-        $data = museum::where('id', $id_museum)
-                        ->join
+        $data = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori','kategori.min','kategori.max')
+                        ->where('id_kategori', $id_category)
+                        ->join('museum','museum.id','=','harga.id_museum')
+                        ->join('kategori','kategori.id','=','harga.id_kategori')
                         ->get();
     
     

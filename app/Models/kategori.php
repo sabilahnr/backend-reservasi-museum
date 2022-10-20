@@ -16,7 +16,7 @@ class kategori extends Model
 
     ];
 
-    public function museum(){
-        return $this->belongsTo(museum::class,'id_museum');
-    }
+    // public function museum(){
+    //     return $this->belongsTo(museum::class,'id_museum');
+    // }
 }
