@@ -43,10 +43,16 @@ class LoginController extends Controller
     {
         
         if ($user->hasRole('admin')){
-            return redirect()->route('dashboard');
+            return response()->json([
+                'status'=> 200,
+                'id' => 1,
+            ]);
         }
 
-        return redirect()->route('home');
+        return response()->json([
+            'status'=> 200,
+            'id' => 2,
+        ]);
     }
 }
  

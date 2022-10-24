@@ -20,5 +20,6 @@ class Pengunjung extends Model
         'foto',
         'harga',
         'pembayaran',
+        'status',
     ];
 }

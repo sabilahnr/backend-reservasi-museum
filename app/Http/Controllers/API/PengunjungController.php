@@ -78,6 +78,7 @@ class PengunjungController extends Controller
         $pengunjung->attachment = $request->input('foto'); 
         $pengunjung->harga_awal = $request->input('harga_awal');
         $pengunjung->pembayaran = $request->input('pembayaran'); 
+        $pengunjung->status = $request->input('status'); 
         $pengunjung->save();
 
         
@@ -90,6 +91,15 @@ class PengunjungController extends Controller
     public function show()
     {
         $pengunjung = Pengunjung::all();
+        return response()->json([
+            'status'=> 200,
+            'pengunjung'=>$pengunjung,
+        ]);
+    }
+
+    public function showKonfirmasi()
+    {
+        $pengunjung = Pengunjung::where('status', 1)->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
@@ -122,5 +132,20 @@ class PengunjungController extends Controller
                 ]);
         }
     
+    }
+
+    public function kehadiran(Request $request)
+    {
+        $dataPengunjung = Pengunjung::find($request->input('idData'));
+
+        $dataPengunjung->id_admin=$request->input('idAdmin');
+        $dataPengunjung->status='Lunas';
+        $dataPengunjung->update();
+    
+        
+        return response()->json([
+            'status'=> 200,
+            'message'=>'Berhasil Konfirmasi Pengunjung',
+        ]);
     }
 }
