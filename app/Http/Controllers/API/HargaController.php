@@ -52,7 +52,7 @@ class HargaController extends Controller
     public function update(Request $request,$id_category)
     {
         // $harga = harga::select('harga.*')->where('id', $id_category)->get();
-        $harga = harga::find( $id_category);
+        $harga = harga::find($id_category);
 
         $harga->hari_biasa = $request->input('biasa');
         $harga->hari_libur = $request->input('libur');
