@@ -97,9 +97,23 @@ class PengunjungController extends Controller
         ]);
     }
 
+    public function show_pemasukan()
+    {
+        $pemasukan = Pengunjung::select('pengunjung.*','users.name')
+                    ->join('users','users.id','=','pengunjung.id_admin')
+                    // ->where('status', 1)
+                    ->get();
+                    
+        // $pemasukan? = Pengunjung::where('status', 1)->get();
+        return response()->json([
+            'status'=> 200,
+            'pemasukan'=>$pemasukan,
+        ]);
+    }
+
     public function showKonfirmasi()
     {
-        $pengunjung = Pengunjung::where('status', 1)->get();
+        $pengunjung = Pengunjung::where('status', null)->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
@@ -139,7 +153,7 @@ class PengunjungController extends Controller
         $dataPengunjung = Pengunjung::find($request->input('idData'));
 
         $dataPengunjung->id_admin=$request->input('idAdmin');
-        $dataPengunjung->status='Lunas';
+        $dataPengunjung->status= 1;
         $dataPengunjung->update();
     
         

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('attachment')->nullable();
             $table->string('pembayaran');
             $table->string('id_admin')->nullable();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
