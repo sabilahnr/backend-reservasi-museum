@@ -25,7 +25,9 @@ Route::post('/validasi-pengunjung',[PengunjungController::class, 'validasi']);
 Route::post('/add-pengunjung',[PengunjungController::class, 'store']);
 Route::get('/pengunjung',[PengunjungController::class, 'show']);
 Route::get('/konfirmasi-pengunjung',[PengunjungController::class, 'showKonfirmasi']);
+Route::get('/pemasukan',[PengunjungController::class, 'show_pemasukan']);
 
+Route::get('/show_admin',[AuthController::class, 'show_admin']);
 Route::get('/show_museum',[MuseumController::class, 'show']);
 Route::get('/show_category/{museumId}',[KategoriController::class, 'show']);
 Route::post('/show_data/{id_category}',[PengunjungController::class, 'show_data']);
@@ -41,6 +43,8 @@ Route::post('/add_faq',[FAQController::class, 'store']);
 Route::delete('/delete_faq/{id_faq}',[FAQController::class, 'destroy']);
 
 Route::post('/login',[AuthController::class, 'login']);
+Route::post('/add_admin',[AuthController::class, 'register']);
+Route::delete('/delete_admin/{id_admin}',[AuthController::class, 'destroy']);
 
 // Route::get('/me',[AuthController::class, 'me']);
 Route::middleware(['auth:api'])->group(function () {
