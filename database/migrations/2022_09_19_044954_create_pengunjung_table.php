@@ -17,8 +17,8 @@ return new class extends Migration
            
             $table->id();
             $table->string('nama');
-            $table->enum('museum',['museum_keris','museum_radya_pustaka']);
-            $table->enum('kategori',['umum','mahasiswa', 'pelajar', 'rombongan_umum', 'rombongan_pelajar', 'wna']);
+            $table->string('museum');
+            $table->string('kategori');
             $table->string('phone');
             $table->string('kota');
             $table->string('negara')->nullable();
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('attachment')->nullable();
             $table->string('pembayaran');
             $table->string('id_admin')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

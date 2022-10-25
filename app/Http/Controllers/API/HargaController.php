@@ -9,27 +9,80 @@ use Illuminate\Http\Request;
 
 class HargaController extends Controller
 {
-    public function show(Request $request, $id_category)
+    public function show()
     {
-        $id_museum = $request->input('id_museum');
-        // $id_category = $request->input('id_category');
+        $harga = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori')
+                   ->join('museum','museum.id','=','harga.id_museum')
+                    ->join('kategori','kategori.id','=','harga.id_kategori')
+                    ->get();
 
-        $harga = harga::
-                        where('id_kategori',$id_category)
+
+        return response()->json([
+            'status'=> 200,
+            'harga'=>$harga,
+        ]);
+    }
+
+    public function edit_show($id_category)
+    {
+        // $harga = harga::find($idHarga);
+
+        $harga = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori','kategori.min','kategori.max')
+                        ->where('id_kategori', $id_category)
+                        ->join('museum','museum.id','=','harga.id_museum')
+                        ->join('kategori','kategori.id','=','harga.id_kategori')
                         ->get();
-    
-    
-        if($harga){
+        if($harga)
+        {
             return response()->json([
                 'status'=> 200,
-                'harga'=>$harga,
-                ]);
-        }else{
-            return response()->json([
-                'status'=> 300,
-                'message'=>'ga ada',
-                ]);
+                'harga' => $harga,
+            ]);
         }
-    
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'No Harga ID Found',
+            ]);
+        }
+
     }
+
+    public function update(Request $request,$id_category)
+    {
+        // $harga = harga::select('harga.*')->where('id', $id_category)->get();
+        $harga = harga::find($id_category);
+
+        $harga->hari_biasa = $request->input('biasa');
+        $harga->hari_libur = $request->input('libur');
+        $harga->update();
+
+        return response()->json([
+            'status'=> 200,
+            'message'=>'Berhasil Update Harga',
+        ]);
+    }
+
+    public function destroy($id_category)
+    {
+        $harga = harga::find($id_category);
+        if($harga)
+        {
+            $harga->delete();
+            return response()->json([
+                'status'=> 200,
+                'message'=>'Student Deleted Successfully',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'No Student ID Found',
+            ]);
+        }
+    }
+    
+
 }
