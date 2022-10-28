@@ -26,6 +26,7 @@ Route::post('/add-pengunjung',[PengunjungController::class, 'store']);
 Route::get('/pengunjung',[PengunjungController::class, 'show']);
 Route::get('/konfirmasi-pengunjung',[PengunjungController::class, 'showKonfirmasi']);
 Route::get('/pemasukan',[PengunjungController::class, 'show_pemasukan']);
+Route::get('/pengunjungExport',[PengunjungController::class, 'pengunjungExport']);
 
 Route::get('/show_admin',[AuthController::class, 'show_admin']);
 Route::get('/show_museum',[MuseumController::class, 'show']);
