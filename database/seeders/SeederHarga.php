@@ -72,5 +72,54 @@ class SeederHarga extends Seeder
             'hari_biasa' => 0,
             'hari_libur' => 0
         ]);
+        harga::create([
+            'id' => 8,
+            'id_museum' => 2,
+            'id_kategori' => 8,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 9,
+            'id_museum' => 2,
+            'id_kategori' => 9,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 10,
+            'id_museum' => 2,
+            'id_kategori' => 10,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 11,
+            'id_museum' => 2,
+            'id_kategori' => 11,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 12,
+            'id_museum' => 2,
+            'id_kategori' => 12,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 13,
+            'id_museum' => 2,
+            'id_kategori' => 13,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
+        harga::create([
+            'id' => 14,
+            'id_museum' => 2,
+            'id_kategori' => 14,
+            'hari_biasa' => 0,
+            'hari_libur' => 0
+        ]);
     }
 }

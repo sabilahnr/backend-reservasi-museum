@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\harga;
-use App\Models\kategori;
 use App\Models\museum;
+use App\Models\kategori;
 use App\Models\Pengunjung;
 use Illuminate\Http\Request;
+use App\Exports\PengunjungExport;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class PengunjungController extends Controller
@@ -158,5 +160,10 @@ class PengunjungController extends Controller
             'status'=> 200,
             'message'=>'Berhasil Konfirmasi Pengunjung',
         ]);
+    }
+
+    public function PengunjungExport()
+    {
+        return Excel::download(new PengunjungExport, 'pengunjung.xlsx');
     }
 }
