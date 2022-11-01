@@ -29,7 +29,7 @@ class PengunjungExport implements FromCollection, WithHeadings
             'Kota',
             'Negara',
             'jumlah',
-            'Harga Awal',
+            'Harga Awwal',
             'Potongan Harga',
             'Harga Akhir',
             'Tanggal',
