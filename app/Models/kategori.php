@@ -13,10 +13,16 @@ class kategori extends Model
     protected $fillable =[
         'id_museum',
         'nama_kategori',
+        'min',
+        'max',
 
     ];
 
-    // public function museum(){
-    //     return $this->belongsTo(museum::class,'id_museum');
-    // }
+    public function museum(){
+        return $this->belongsTo('id_museum');
+    }
+
+    public function harga(){
+        return $this->hasMany('id_kategori');
+    }
 }

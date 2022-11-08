@@ -29,7 +29,10 @@ Route::get('/pemasukan',[PengunjungController::class, 'show_pemasukan']);
 Route::get('/pengunjungExport',[PengunjungController::class, 'pengunjungExport']);
 
 Route::get('/show_admin',[AuthController::class, 'show_admin']);
+
 Route::get('/show_museum',[MuseumController::class, 'show']);
+Route::post('/add-museum',[MuseumController::class, 'store']);
+
 Route::get('/show_category/{museumId}',[KategoriController::class, 'show']);
 Route::post('/show_data/{id_category}',[PengunjungController::class, 'show_data']);
 Route::get('/show_harga',[HargaController::class, 'show']);
