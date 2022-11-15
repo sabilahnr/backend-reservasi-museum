@@ -62,7 +62,56 @@ class kategori extends Seeder
             'id_museum' => 2,
             'min' => 1,
             'max' => 500,
+            'nama_kategori' => 'Siswa'
+        ]);
+        ModelsKategori::create([
+            'id' => 8,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Mahasiswa'
+        ]);
+        ModelsKategori::create([
+            'id' => 9,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Peneliti'
+        ]);
+        ModelsKategori::create([
+            'id' => 10,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Guru'
+        ]);
+        ModelsKategori::create([
+            'id' => 11,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Dosen'
+        ]);
+        ModelsKategori::create([
+            'id' => 12,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
             'nama_kategori' => 'Umum'
+        ]);
+        ModelsKategori::create([
+            'id' => 13,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Warga Negara Asing'
+        ]);
+        ModelsKategori::create([
+            'id' => 14,
+            'id_museum' => 2,
+            'min' => 1,
+            'max' => 500,
+            'nama_kategori' => 'Seniman'
         ]);
     }
 }

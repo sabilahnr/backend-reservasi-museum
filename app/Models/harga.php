@@ -11,6 +11,7 @@ class harga extends Model
     protected $table = 'harga';
     protected $fillable =[
         'id_kategori',
+        'id_museum',
         'hari_biasa',
         'hari_libur',
         
@@ -18,7 +19,13 @@ class harga extends Model
     ];
     protected $guarded = [];
 
-    
+    public function museum(){
+        return $this->hasMany('id_museum');
+    }
+
+    public function kategori(){
+        return $this->hasMany( 'id_kategori');
+    }
 
    
 
