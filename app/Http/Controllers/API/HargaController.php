@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\harga;
+use App\Models\kategori;
 use Illuminate\Http\Request;
 
 class HargaController extends Controller
@@ -23,7 +24,7 @@ class HargaController extends Controller
         ]);
     }
 
-    public function edit_show($id_category)
+    public function edit_show($id_category) 
     {
         // $harga = harga::find($idHarga);
 
@@ -64,12 +65,15 @@ class HargaController extends Controller
         ]);
     }
 
-    public function destroy($id_category)
+    public function 
+    destroy($id_category)
     {
         $harga = harga::find($id_category);
+        $kategori = kategori::find($id_category);
         if($harga)
         {
             $harga->delete();
+            $kategori->delete();
             return response()->json([
                 'status'=> 200,
                 'message'=>'Student Deleted Successfully',

@@ -59,6 +59,49 @@ class MuseumController extends Controller
 
   }
 
+  public function edit_show($id_category) 
+    {
+        $museum = museum::find($id_category);
+        
+        if($museum)
+        {
+            return response()->json([
+                'status'=> 200,
+                'museum' => $museum,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'No Museum Id Found',
+            ]);
+        }
+
+    }
+
+    public function destroy($id_museum)
+    {
+        $museum = museum::find($id_museum);
+        if($museum)
+        {
+            $museum->delete();
+            return response()->json([
+                'status'=> 200,
+                'message'=>'Museum Berhasil Dihapus',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'Tidak ada ID Museum',
+            ]);
+        }
+    }
+
+
+
     public function store(Request $request) 
     {
         $nama_kategori = DB::table('kategori')->where('nama_kategori',$request->kategori)->first();
@@ -121,6 +164,20 @@ class MuseumController extends Controller
         //         ]);
         //     }
         // }
+    }
+
+    public function update(Request $request,$id_museum)
+    {
+        // $harga = harga::select('harga.*')->where('id', $id_category)->get();
+        $museum = museum::find($id_museum);
+
+        $museum->nama_museum = $request->input('museum');
+        $museum->update();
+
+        return response()->json([
+            'status'=> 200,
+            'message'=>'Berhasil Update Museum$museum',
+        ]);
     }
 
     public function store_museum(Request $request) 

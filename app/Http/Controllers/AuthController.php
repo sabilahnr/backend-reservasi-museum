@@ -114,14 +114,14 @@ class AuthController extends Controller
             $admin->delete();
             return response()->json([
                 'status'=> 200,
-                'message'=>'Berhasil Delete FAQ',
+                'message'=>'Berhasil Delete admin',
             ]);
         }
         else
         {
             return response()->json([
                 'status'=> 404,
-                'message' => 'No Student ID Found',
+                'message' => 'No Admin ID Found',
             ]);
         }
     }
