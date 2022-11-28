@@ -56,8 +56,8 @@ Route::post('/login',[AuthController::class, 'login']);
 Route::post('/add_admin',[AuthController::class, 'register']);
 Route::delete('/delete_admin/{id_admin}',[AuthController::class, 'destroy']);
 
-// Route::get('files', [PanduanController::class, 'index'])->name('files');
-Route::post('files', [PanduanController::class, 'upload'])->name('files');
+Route::get('show_files', [PanduanController::class, 'index'])->name('images');
+Route::post('files', [PanduanController::class, 'upload'])->name('images');
 
 // Route::get('/me',[AuthController::class, 'me']);
 Route::middleware(['auth:api'])->group(function () {
