@@ -9,6 +9,7 @@ use App\Http\Controllers\API\PengunjungController;
 use App\Http\Controllers\API\FAQController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PanduanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,9 @@ Route::get('/show_admin',[AuthController::class, 'show_admin']);
 Route::get('/show_museum',[MuseumController::class, 'show']);
 Route::post('/add_data',[MuseumController::class, 'store']);
 Route::post('/add_museum',[MuseumController::class, 'store_museum']);
+Route::get('/edit-museum/{id_museum}',[MuseumController::class, 'edit_show']);
+Route::delete('/delete_museum/{id_museum}',[MuseumController::class, 'destroy']);
+Route::put('/update-museum/{id_museum}',[MuseumController::class, 'update']);
 
 Route::get('/show_category/{museumId}',[KategoriController::class, 'show']);
 Route::post('/show_data/{id_category}',[PengunjungController::class, 'show_data']);
@@ -40,6 +44,7 @@ Route::get('/show_harga',[HargaController::class, 'show']);
 Route::get('/edit-harga/{id_category}',[HargaController::class, 'edit_show']);
 Route::put('/update-harga/{id_category}',[HargaController::class, 'update']);
 Route::put('/hapus-harga/{id_category}',[HargaController::class, 'destroy']);
+Route::delete('/delete-data/{id_category}',[HargaController::class, 'destroy']);
 
 Route::get('/show_faq',[FAQController::class, 'show']);
 Route::get('/edit_faq/{id_faq}',[FAQController::class, 'edit_show']);
@@ -50,6 +55,9 @@ Route::delete('/delete_faq/{id_faq}',[FAQController::class, 'destroy']);
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/add_admin',[AuthController::class, 'register']);
 Route::delete('/delete_admin/{id_admin}',[AuthController::class, 'destroy']);
+
+Route::get('show_files', [PanduanController::class, 'index'])->name('images');
+Route::post('files', [PanduanController::class, 'upload'])->name('images');
 
 // Route::get('/me',[AuthController::class, 'me']);
 Route::middleware(['auth:api'])->group(function () {
