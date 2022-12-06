@@ -31,7 +31,7 @@ class PanduanController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'images' => 'required',
-                'images.*' => 'required|mimes:pdf'
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]
         );
  
@@ -58,5 +58,25 @@ class PanduanController extends Controller
             $response["message"] = "Failed! image(s) not uploaded";
         }
         return response()->json($response);
+    }
+
+    public function destroy($id)
+    {
+        $files = Panduan::find($id);
+        if($files)
+        {
+            $files->delete();
+            return response()->json([
+                'status'=> 200,
+                'message'=>'Berhasil Delete File',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'No Data ID Found',
+            ]);
+        }
     }
 }
