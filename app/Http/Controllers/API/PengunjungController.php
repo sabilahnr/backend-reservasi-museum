@@ -6,6 +6,8 @@ use App\Models\harga;
 use App\Models\museum;
 use App\Models\kategori;
 use App\Models\Pengunjung;
+use App\Models\tikets;
+use Database\Seeders\tiket;
 use Illuminate\Http\Request;
 use App\Exports\PengunjungExport;
 use App\Http\Controllers\Controller;
@@ -30,6 +32,7 @@ class PengunjungController extends Controller
         'kategori'=>'required|max:191',
         'tanggal'=>'required|max:191',       
         'attachment.*'=>'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+        
         // 'pembayaran'=>'required|max:191',
     ],[
         'nama.required' => 'Kolom nama wajib diisi',
@@ -80,6 +83,48 @@ class PengunjungController extends Controller
         $pengunjung->status = $request->input('status'); 
         $pengunjung->save();
 
+        $kodetiket = new tikets;
+        $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket');
+        if (!$conn) {
+            die ('Gagal terhubung MySQL: ' . mysqli_connect_error());	
+        }
+        $museum=museum::where($request->nama_museum);
+
+            $semua=mysqli_query($conn,"SELECT max(id) as maxKode FROM pengunjung");
+            $data=mysqli_fetch_array($semua);
+            $kode=$data['maxKode'];
+            $noUrut=(int)substr($kode,9,3);
+            $noUrut++;
+        
+            $waktu=date('tanggal');
+            $kode_tiket="TM".$waktu.sprintf("%03s",$noUrut);
+            $kodetiket->kode_tiket = $kode_tiket;
+            $kodetiket->tanggal = $request->input('tanggal');
+        $kodetiket->museum = $request->input('museum');
+        $kodetiket->kategori = $request->input('kategori');
+        $kodetiket->status = $request->input('status');
+        $kodetiket->jumlah = $request->input('jumlah');
+        $kodetiket->save();
+        // $code = strtoupper(Str::random(6));
+        // $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket');
+        // if (!$conn) {
+        //     die ('Gagal terhubung MySQL: ' . mysqli_connect_error());	
+        // }
+        // $museum=museum::where($request->nama_museum);
+
+        // $semua=mysqli_query($conn,"SELECT max(id) as maxKode FROM pengunjung");
+        // $data=mysqli_fetch_array($semua);
+        // $kode=$data['maxKode'];
+        // $noUrut=(int)substr($kode,9,3);
+        // $noUrut++;
+    
+        // $waktu=date('tanggal');
+        // $kode_tiket="TM".$waktu.sprintf("%03s",$noUrut);
+
+        // return response()->json([
+        //     'status'=> 200,
+        //     'message'=>$museum,
+        // ]);
         
         return response()->json([
             'status' => 200,
