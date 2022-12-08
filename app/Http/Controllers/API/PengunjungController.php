@@ -84,7 +84,7 @@ class PengunjungController extends Controller
         $pengunjung->save();
 
         $kodetiket = new tikets;
-        $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket');
+        $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket_museum');
         if (!$conn) {
             die ('Gagal terhubung MySQL: ' . mysqli_connect_error());	
         }

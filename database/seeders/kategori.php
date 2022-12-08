@@ -55,7 +55,7 @@ class kategori extends Seeder
             'id_museum' => 1,
             'min' => 1,
             'max' => 50,
-            'nama_kategori' => 'Wisatawan Asing'
+            'nama_kategori' => 'Foreigner'
         ]);
         ModelsKategori::create([
             'id' => 7,
