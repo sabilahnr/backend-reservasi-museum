@@ -44,5 +44,13 @@ class UserSeeder extends Seeder
         ]);
 
         $superadmin->assignRole('superadmin');
+
+        $kepalauptmuseum = User::create([
+            'name' => 'Pak Luthfi',
+            'email' => 'kepalauptmuseum@role.test',
+            'password' => bcrypt('12345678')
+        ]);
+
+        $kepalauptmuseum->assignRole('kepalauptmuseum');
     }
 }

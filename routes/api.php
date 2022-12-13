@@ -1,15 +1,17 @@
 <?php
 
+use App\Http\Controllers\API\AboutController;
 use App\Http\Controllers\API\HargaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\MuseumController;
+use APpp\Http\Controllers\API\MuseumController;
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\PengunjungController;
 use App\Http\Controllers\API\FAQController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PanduanController;
+// use App\Http\Controllers\API\AboutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +48,12 @@ Route::get('/edit-harga/{id_category}',[HargaController::class, 'edit_show']);
 Route::put('/update-harga/{id_category}',[HargaController::class, 'update']);
 Route::put('/hapus-harga/{id_category}',[HargaController::class, 'destroy']);
 Route::delete('/delete-data/{id_category}',[HargaController::class, 'destroy']);
+
+Route::get('/show_about',[AboutController::class, 'show']);
+Route::get('/edit_about/{id_about}',[AboutController::class, 'edit_show']);
+Route::put('/update_about/{id_about}',[AboutController::class, 'update']);
+Route::post('/add_about',[AboutController::class, 'store']);
+Route::delete('/delete_about/{id_about}',[AboutController::class, 'destroy']);
 
 Route::get('/show_faq',[FAQController::class, 'show']);
 Route::get('/edit_faq/{id_faq}',[FAQController::class, 'edit_show']);

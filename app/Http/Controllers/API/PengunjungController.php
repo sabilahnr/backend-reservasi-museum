@@ -250,5 +250,8 @@ class PengunjungController extends Controller
         
 
         return Excel::download(new PengunjungExport, 'pengunjung.xlsx');
+        // return [
+        //     (new DownloadExcel)->withFilename('users-' . time() . '.xlsx'),
+        // ];
     }
 }
