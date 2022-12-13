@@ -26,6 +26,7 @@ Route::post('/validasi-pengunjung',[PengunjungController::class, 'validasi']);
 Route::post('/add-pengunjung',[PengunjungController::class, 'store']);
 Route::get('/pengunjung',[PengunjungController::class, 'show']);
 Route::get('/konfirmasi-pengunjung',[PengunjungController::class, 'showKonfirmasi']);
+Route::get('/status-pembayaran',[PengunjungController::class, 'showStatus']);
 Route::get('/pemasukan',[PengunjungController::class, 'show_pemasukan']);
 Route::get('/pengunjungExport',[PengunjungController::class, 'pengunjungExport']);
 
@@ -72,6 +73,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::middleware('auth:sanctum')->get('me', [AuthController::class, 'me'])->name('me');
     
  Route::put('/kehadiran',[PengunjungController::class, 'kehadiran']);
+ Route::put('/status',[PengunjungController::class, 'status']);
+
+ Route::get('show-ticket/{kode}',[PengunjungController::class, 'show_ticket']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

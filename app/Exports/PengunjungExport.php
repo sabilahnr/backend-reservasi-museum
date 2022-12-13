@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class PengunjungExport implements FromCollection, WithHeadings 
+class PengunjungExport implements FromCollection, WithHeadings  
 {
     /**
     * @return \Illuminate\Support\Collection

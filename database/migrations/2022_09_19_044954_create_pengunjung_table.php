@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('pembayaran');
             $table->string('id_admin')->nullable();
             $table->string('status')->nullable();
+            $table->string('kehadiran')->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ use Database\Seeders\tiket;
 use Illuminate\Http\Request;
 use App\Exports\PengunjungExport;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -83,58 +84,41 @@ class PengunjungController extends Controller
         $pengunjung->status = $request->input('status'); 
         $pengunjung->save();
 
-        $kodetiket = new tikets;
-        $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket_museum');
-        if (!$conn) {
-            die ('Gagal terhubung MySQL: ' . mysqli_connect_error());	
+        $kode_awal = preg_split("/\s+/", $request->museum);;
+        $id_musuem = DB::table('museum')->where('nama_museum', $request->museum)->first()->id;
+        $id_kategori = DB::table('kategori')->where('nama_kategori', $request->kategori)->first()->id;
+        $hasil = "";
+
+        foreach ($kode_awal as $w) {
+            $hasil .= mb_substr($w, 0, 1);
         }
-        $museum=museum::where($request->nama_museum);
-
-            $semua=mysqli_query($conn,"SELECT max(id) as maxKode FROM pengunjung");
-            $data=mysqli_fetch_array($semua);
-            $kode=$data['maxKode'];
-            $noUrut=(int)substr($kode,9,3);
-            $noUrut++;
         
-            $waktu=date('tanggal');
-            $kode_tiket="TM".$waktu.sprintf("%03s",$noUrut);
-            $kodetiket->kode_tiket = $kode_tiket;
-            $kodetiket->tanggal = $request->input('tanggal');
-        $kodetiket->museum = $request->input('museum');
+        $kodetiket = new tikets;
+        $kodetiket->kode_tiket = $hasil."-".$id_musuem.$id_kategori."-".$request->jumlah."-".$request->tanggal."-".$pengunjung->id  ;
+        $kodetiket->id_pengunjung = $pengunjung->id ;
+        $kodetiket->museum = $request->input('museum'); 
         $kodetiket->kategori = $request->input('kategori');
-        $kodetiket->status = $request->input('status');
-        $kodetiket->jumlah = $request->input('jumlah');
+        $kodetiket->jumlah = $request->input('jumlah'); 
+        $kodetiket->tanggal = $request->input('tanggal'); 
+        $kodetiket->nama = $request->input('nama');
+        $kodetiket->harga = $request->input('harga_awal');
         $kodetiket->save();
-        // $code = strtoupper(Str::random(6));
-        // $conn = mysqli_connect('127.0.0.1', 'root', '', 'etiket');
-        // if (!$conn) {
-        //     die ('Gagal terhubung MySQL: ' . mysqli_connect_error());	
-        // }
-        // $museum=museum::where($request->nama_museum);
 
-        // $semua=mysqli_query($conn,"SELECT max(id) as maxKode FROM pengunjung");
-        // $data=mysqli_fetch_array($semua);
-        // $kode=$data['maxKode'];
-        // $noUrut=(int)substr($kode,9,3);
-        // $noUrut++;
-    
-        // $waktu=date('tanggal');
-        // $kode_tiket="TM".$waktu.sprintf("%03s",$noUrut);
 
-        // return response()->json([
-        //     'status'=> 200,
-        //     'message'=>$museum,
-        // ]);
+        
         
         return response()->json([
             'status' => 200,
-            'message' => 'Berhasil menambahkan data pengunjung'
+            'kode_tiket' => $kodetiket->kode_tiket,
+            'message' => "Berhasil",
         ]);
     }
 
     public function show()
     {
-        $pengunjung = Pengunjung::all();
+        $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+                                ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                                ->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
@@ -157,11 +141,40 @@ class PengunjungController extends Controller
 
     public function showKonfirmasi()
     {
-        $pengunjung = Pengunjung::where('status', null)->get();
+        // $pengunjung = Pengunjung::where('kehadiran', null)->get();
+        $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+                            ->where('pengunjung.kehadiran', null)
+                            ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                            ->get();
+
+
+
+        return response()->json([
+            'status'=> 200,
+            'pengunjung'=>$tiket,
+        ]);
+    }
+
+    public function showStatus()
+    {
+        $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+                                ->where('pengunjung.status', null)
+                                ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                                ->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
         ]);
+    }
+
+    public function show_ticket($kode)
+    {
+       $tiket =  DB::table('tikets')->where('kode_tiket',$kode)->first();
+       return response()->json([
+        'status'=> 200,
+        'data'=>$tiket,
+    ]);
+
     }
 
     public function show_data($id_category)
@@ -195,15 +208,40 @@ class PengunjungController extends Controller
     public function kehadiran(Request $request)
     {
         $dataPengunjung = Pengunjung::find($request->input('idData'));
-
         $dataPengunjung->id_admin=$request->input('idAdmin');
-        $dataPengunjung->status= 1;
+        $dataPengunjung->kehadiran = "Hadir";
         $dataPengunjung->update();
+
+        $tiket = tikets::where('id_pengunjung', '=', $request->idData)->first();
+        $tiket->kehadiran= "Hadir";
+        $tiket->update();
+
     
         
         return response()->json([
             'status'=> 200,
             'message'=>'Berhasil Konfirmasi Pengunjung',
+        ]);
+    }
+
+    public function status(Request $request)
+    {
+        $dataPengunjung = Pengunjung::find($request->input('idData'));
+
+        $dataPengunjung->id_admin=$request->input('idAdmin');
+        $dataPengunjung->status = "Lunas";
+        $dataPengunjung->update();
+
+        
+        // $tiket = DB::table('tikets')->where('id_pengunjung',$request->idData)->limit(1);
+        $tiket = tikets::where('id_pengunjung', '=', $request->idData)->first();
+        $tiket->status= "Lunas";
+        $tiket->update();
+    
+        
+        return response()->json([
+            'status'=> 200,
+            'message'=>'Pembayaran Pengunjung Berhasil',
         ]);
     }
 

@@ -16,11 +16,15 @@ return new class extends Migration
         Schema::create('tikets', function (Blueprint $table) {
             $table->id();
             $table->string('kode_tiket');
-            $table->string('tanggal');
+            $table->string('id_pengunjung');
+            $table->string('nama');
             $table->string('museum');
             $table->string('kategori');
-            $table->string('status')->nullable();
             $table->string('jumlah');
+            $table->string('harga');
+            $table->string('status')->nullable();
+            $table->string('kehadiran')->nullable();
+            $table->string('tanggal');
             $table->timestamps();
         });
     }
