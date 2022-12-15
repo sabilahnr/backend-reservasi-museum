@@ -129,7 +129,7 @@ class PengunjungController extends Controller
     {
         $pemasukan = Pengunjung::select('pengunjung.*','users.name')
                     ->join('users','users.id','=','pengunjung.id_admin')
-                    // ->where('status', 1)
+                    ->where('status', 'Lunas')
                     ->get();
                     
         // $pemasukan? = Pengunjung::where('status', 1)->get();
@@ -158,7 +158,7 @@ class PengunjungController extends Controller
     public function showStatus()
     {
         $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                                ->where('pengunjung.status', null)
+                                ->where('pengunjung.status', 'belum lunas')
                                 ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
                                 ->get();
         return response()->json([

@@ -104,66 +104,43 @@ class MuseumController extends Controller
 
     public function store(Request $request) 
     {
-        $nama_kategori = DB::table('kategori')->where('nama_kategori',$request->kategori)->first();
+        // $nama_kategori = DB::table('kategori')->where('nama_kategori',$request->kategori)->first();
+        $nama_kategori = DB::table('kategori')->where('id_museum',$request->nama)->where('nama_kategori',$request->kategori)->first();
         
-        if($nama_kategori)
-        {
-            return response()->json([
-                'status'=> 205,
-                'message'=>'Kategori Sudah Ada',
-            ]);
-        }        
-        else
-        {
-            $kategori = kategori::create([
-                        'nama_kategori' => $request->kategori,
-                        'id_museum' => $request->nama,  
-                        'min' => 1,
-                        'max' => 500,
-                    ]);
-            $id_kategori = kategori::latest('id')->first();
-            harga::create([
-                            'id_museum' => $request->nama, 
-                            'id_kategori' => $id_kategori->id,
-                            'hari_biasa' => $request->biasa,
-                            'hari_libur' => $request->libur
+            if($nama_kategori !== null)
+            {
+                return response()->json([
+                    'status'=> 205,
+                    'message'=>'Kategori Sudah Ada',
+                ]);
+            }        
+            else
+            {
+                $kategori = kategori::create([
+                            'nama_kategori' => $request->kategori,
+                            'id_museum' => $request->nama,  
+                            'min' => 1,
+                            'max' => 500,
                         ]);
+                $id_kategori = kategori::latest('id')->first();
+                harga::create([
+                                'id_museum' => $request->nama, 
+                                'id_kategori' => $id_kategori->id,
+                                'hari_biasa' => $request->biasa,
+                                'hari_libur' => $request->libur
+                            ]);
 
-                        return response()->json([
-                                        'status'=> 200,
-                                        'message'=>'Data Berhasil Ditambahkan',
-                                    ]);
-        }
+                            return response()->json([
+                                            'status'=> 200,
+                                            'message'=>'Data Berhasil Ditambahkan',
+                                        ]);
+            }
+        // return response()->json([
+        //                                     'status'=> 200,
+        //                                     'message'=>$nama_kategori,
+        //                                 ]);
 
-
-        // $museum = museum::create([
-        //     'nama_museum' => $request->nama,
-        // ]);
-        // if($museum) 
-        // {
-        //     $id_museum = museum::latest('id')->first();
-        //     $kategori = kategori::create([
-        //         'nama_kategori' => $request->kategori,
-        //         'id_museum' => $id_museum->id,  
-        //         'min' => 1,
-        //         'max' => 500,
-        //     ]);
-        //     if($kategori)
-        //     {
-        //         $id_kategori = kategori::latest('id')->first();
-        //         harga::create([
-        //             'id_museum' => $id_museum->id,
-        //             'id_kategori' => $id_kategori->id,
-        //             'hari_biasa' => $request->biasa,
-        //             'hari_libur' => $request->libur
-        //         ]);
-
-        //         return response()->json([
-        //             'status'=> 200,
-        //             'message'=>'Row Inserted',
-        //         ]);
-        //     }
-        // }
+        
     }
 
     public function update(Request $request,$id_museum)
