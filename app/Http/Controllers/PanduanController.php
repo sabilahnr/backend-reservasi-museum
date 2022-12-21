@@ -24,7 +24,7 @@ class PanduanController extends Controller
      * @param $request
      * @return JSON response
      */
-    public function upload(Request $request) {
+    public function     upload(Request $request) {
         $imagesName = [];
         $response = [];
  
