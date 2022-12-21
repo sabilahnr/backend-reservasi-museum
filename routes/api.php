@@ -48,7 +48,7 @@ Route::put('/update-harga/{id_category}', [HargaController::class, 'update']);
 Route::put('/hapus-harga/{id_category}', [HargaController::class, 'destroy']);
 Route::delete('/delete-data/{id_category}', [HargaController::class, 'destroy']);
 
-Route::get('/show_about',[AboutController`::class, 'show']);
+Route::get('/show_about',[AboutController::class, 'show']);
 Route::get('/edit_about/{id_about}',[AboutController::class, 'edit_show']);
 Route::put('/update_about/{id_about}',[AboutController::class, 'update']);
 Route::post('/add_about',[AboutController::class, 'store']);

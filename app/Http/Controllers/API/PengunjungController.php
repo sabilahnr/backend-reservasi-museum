@@ -67,9 +67,6 @@ class PengunjungController extends Controller
    }
     public function store(Request $request)
     {  
-
-
-
         $pengunjung = new Pengunjung;
         $pengunjung->nama = $request->input('nama'); 
         $pengunjung->kota = $request->input('kota'); 
@@ -104,9 +101,6 @@ class PengunjungController extends Controller
         $kodetiket->harga = $request->input('harga_awal');
         $kodetiket->save();
 
-
-        
-        
         return response()->json([
             'status' => 200,
             'kode_tiket' => $kodetiket->kode_tiket,
@@ -169,8 +163,8 @@ class PengunjungController extends Controller
 
     public function show_ticket($kode)
     {
-       $tiket =  DB::table('tikets')->where('kode_tiket',$kode)->first();
-       return response()->json([
+        $tiket =  DB::table('tikets')->where('kode_tiket',$kode)->first();
+        return response()->json([
         'status'=> 200,
         'data'=>$tiket,
     ]);
@@ -216,8 +210,6 @@ class PengunjungController extends Controller
         $tiket->kehadiran= "Hadir";
         $tiket->update();
 
-    
-        
         return response()->json([
             'status'=> 200,
             'message'=>'Berhasil Konfirmasi Pengunjung',
