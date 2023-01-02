@@ -60,8 +60,8 @@ class AuthController extends Controller
 
         // return $this->JsonResponse(200, 'Data user sukses didapat', $user);
         return response()->json([
-            'status' => 200,
-            'user' => $user,
+                'status' => 200,
+                'user' => $user,
             // 'token' => "masuk",
         ]);
 
@@ -92,7 +92,7 @@ class AuthController extends Controller
         {
             return response()->json([
                 'status' => 200,
-                'message' => "Berhasil bang",
+                'message' => "Berhasil Menambahkan Admin",
             ]);
         }else
         {

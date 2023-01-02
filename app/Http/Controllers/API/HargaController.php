@@ -76,14 +76,14 @@ class HargaController extends Controller
             $kategori->delete();
             return response()->json([
                 'status'=> 200,
-                'message'=>'Student Deleted Successfully',
+                'message'=>'Berhasil Menghapus Data',
             ]);
         }
         else
         {
             return response()->json([
                 'status'=> 404,
-                'message' => 'No Student ID Found',
+                'message' => 'Tidak ada ID data',
             ]);
         }
     }
