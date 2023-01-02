@@ -25,7 +25,7 @@ class PengunjungController extends Controller
         'negara'=>'nullable|max:191',
         'phone'=>'required|min:10|max:13',
         'jumlah'=>'required|max:191',
-        'foto.*'=>'nullable|mimes:application/pdf',
+        // 'foto.*'=>'nullable|mimes:application/pdf',
         // 'harga_awal'=>'required|max:191',
         // 'potongan_harga'=>'required|max:191',
         // 'harga_akhir'=>'required|max:191',

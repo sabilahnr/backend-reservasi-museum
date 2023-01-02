@@ -153,7 +153,7 @@ class MuseumController extends Controller
 
         return response()->json([
             'status'=> 200,
-            'message'=>'Berhasil Update Museum$museum',
+            'message'=>'Berhasil Update Museum' + $museum ,
         ]);
     }
 
