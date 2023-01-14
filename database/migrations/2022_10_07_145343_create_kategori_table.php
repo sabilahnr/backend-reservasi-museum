@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('kategori', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_museum');
             $table->string('nama_kategori');
             $table->string('min');
             $table->string('max');

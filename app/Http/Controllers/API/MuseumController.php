@@ -105,20 +105,21 @@ class MuseumController extends Controller
     public function store(Request $request) 
     {
         // $nama_kategori = DB::table('kategori')->where('nama_kategori',$request->kategori)->first();
-        $nama_kategori = DB::table('kategori')->where('id_museum',$request->nama)->where('nama_kategori',$request->kategori)->first();
+
+        // $nama_kategori = DB::table('kategori')->where('id_museum',$request->nama)->where('nama_kategori',$request->kategori)->first();
         
-            if($nama_kategori !== null)
-            {
-                return response()->json([
-                    'status'=> 205,
-                    'message'=>'Kategori Sudah Ada',
-                ]);
-            }        
-            else
-            {
+        //     if($nama_kategori !== null)
+        //     {
+        //         return response()->json([
+        //             'status'=> 205,
+        //             'message'=>'Kategori Sudah Ada',
+        //         ]);
+        //     }        
+        //     else
+        //     {
                 $kategori = kategori::create([
                             'nama_kategori' => $request->kategori,
-                            'id_museum' => $request->nama,  
+                            // 'id_museum' => $request->nama,  
                             'min' => 1,
                             'max' => 500,
                         ]);
@@ -134,7 +135,7 @@ class MuseumController extends Controller
                                             'status'=> 200,
                                             'message'=>'Data Berhasil Ditambahkan',
                                         ]);
-            }
+            // }
         // return response()->json([
         //                                     'status'=> 200,
         //                                     'message'=>$nama_kategori,

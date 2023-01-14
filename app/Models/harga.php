@@ -24,7 +24,7 @@ class harga extends Model
     }
 
     public function kategori(){
-        return $this->hasMany( 'id_kategori');
+        return $this->belongsToMany(kategori::class);
     }
 
    
