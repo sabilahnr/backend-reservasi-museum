@@ -13,7 +13,9 @@ class KategoriController extends Controller
     
     public function show($museumId)
     {
-        $kategori = kategori::where('id_museum',$museumId)
+        // $kategori = kategori::where('id_museum',$museumId)
+        //                     ->get();
+        $kategori = harga::where('id_museum',$museumId)
                             ->get();
         return response()->json([
             'status'=> 200,
