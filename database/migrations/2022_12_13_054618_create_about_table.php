@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('about', function (Blueprint $table) {
-            $table->id();
+            $table->id(); 
+            // $table->integer('id_museum')->unsigned(); 
+            $table->foreignId('id_museum')->references('id')->on('museum')->constrained()->onDelete('cascade'); 
             $table->longText('about'); 
             $table->timestamps(); 
         });

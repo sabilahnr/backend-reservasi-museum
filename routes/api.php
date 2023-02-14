@@ -54,6 +54,13 @@ Route::get('/edit-museum/{id_museum}', [MuseumController::class, 'edit_show']);
 Route::delete('/delete_museum/{id_museum}', [MuseumController::class, 'destroy']);
 Route::put('/update-museum/{id_museum}', [MuseumController::class, 'update']);
 
+Route::get('/show_kategori', [KategoriController::class, 'show_kategori']);
+Route::post('/add_kategori', [KategoriController::class, 'store']);
+Route::delete('/delete_kategori/{id_kategori}', [KategoriController::class, 'destroy']);
+Route::get('/edit_kategori/{id_kategori}', [KategoriController::class, 'edit_show']);
+Route::put('/update_kategori/{id_kategori}', [KategoriController::class, 'update']);
+
+
 Route::get('/show_category/{museumId}', [KategoriController::class, 'show']);
 
 Route::get('/show_harga', [HargaController::class, 'show']);
@@ -63,7 +70,7 @@ Route::put('/hapus-harga/{id_category}', [HargaController::class, 'destroy']);
 Route::delete('/delete-data/{id_category}', [HargaController::class, 'destroy']);
 
 Route::post('/add_about',[AboutController::class, 'store']);
-Route::get('/show_about',[AboutController::class, 'show']);
+Route::get('/show_about/{id_museum}',[AboutController::class, 'show']);
 Route::put('/update_about/{id_about}',[AboutController::class, 'update']);
 Route::delete('/delete_about/{id_about}',[AboutController::class, 'destroy']);
 Route::get('/edit_about/{id_about}',[AboutController::class, 'edit_show']);

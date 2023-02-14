@@ -19,12 +19,13 @@ class harga extends Model
     ];
     protected $guarded = [];
 
+    
+        public function kategori(){
+            return $this->belongsTo('App\Models\kategori');
+        }
+
     public function museum(){
         return $this->hasMany('id_museum');
-    }
-
-    public function kategori(){
-        return $this->belongsToMany(kategori::class);
     }
 
    

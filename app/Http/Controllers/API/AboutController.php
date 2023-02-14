@@ -7,14 +7,17 @@ use Illuminate\Http\Request;
 
 class AboutController extends Controller
 {
-    public function show()
+    public function show($id_museum)
     {
-        $dataAbout = about::all();
+        $dataAbout = about::where('id_museum',$id_museum)->first();
+        // $satu = $dataAbout->museum;
         return response()->json([
             'status'=> 200,
             'dataAbout'=>$dataAbout,
         ]);
     }
+
+
 
     public function edit_show($id_about)
     {

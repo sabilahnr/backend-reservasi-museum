@@ -24,14 +24,13 @@ return new class extends Migration
             $table->string('negara')->nullable();
             $table->string('jumlah');
             $table->string('harga_awal');
-            $table->string('potongan_harga')->nullable();
-            $table->string('harga_akhir')->nullable();
             $table->string('tanggal');
             $table->string('attachment')->nullable();
             $table->string('pembayaran');
             $table->string('id_admin')->nullable();
             $table->string('status')->nullable();
             $table->string('kehadiran')->nullable();
+            $table->string('tanggal_pembayaran')->nullable();
             $table->timestamps();
         });
     }

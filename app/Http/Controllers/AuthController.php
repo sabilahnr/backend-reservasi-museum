@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -70,7 +72,7 @@ class AuthController extends Controller
 
     public function show_admin()
     {
-        $admin =   User::role('admin')->get();
+        $admin =   User::with('roles')->get();
         // $admin =   !Hash::check('password')
 
         return response()->json([
@@ -81,12 +83,32 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = new User();
-        $user->name = ucwords(strtolower($request->nama));
-        $user->email = strtolower($request->email);
-        $user->password = Hash::make($request->password);
-        $save = $user->save();
-        $user->syncRoles('admin');
+        $validator = Validator::make($request->all(), [
+            'password' => ['required', Password::min(8)->letters()
+                                                                    ->mixedCase()
+                                                                    ->numbers()
+                                                                    ->symbols()
+                                                                    ->uncompromised()
+                                                                ],
+        ]);
+
+        
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=> 422,
+                'validate_err'=> $validator->messages(),
+            ]);
+        }
+        else
+        {
+            $user = new User();
+            $user->name = ucwords(strtolower($request->nama));
+            $user->email = strtolower($request->email);
+            $user->password = Hash::make($request->password);
+            $save = $user->save();
+            $user->syncRoles('admin');
+        }
 
         if($save)
         {

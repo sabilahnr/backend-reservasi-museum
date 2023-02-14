@@ -15,10 +15,17 @@ class museum extends Model
 
     ];
 
+    protected $with = ['about'];
+
     public function kategori(){
         return $this->hasOne(kategori::class,'id_kategori');
     }
     public function harga(){
         return $this->hasOne(harga::class,'id','');
     }
+    public function about(){
+        return $this->hasOne(about::class, 'id_museum', 'id');
+    }
+    
+
 }

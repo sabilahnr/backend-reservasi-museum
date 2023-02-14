@@ -8,6 +8,7 @@ use App\Models\museum;
 use App\Models\kategori;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\about;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -117,29 +118,34 @@ class MuseumController extends Controller
         //     }        
         //     else
         //     {
-                $kategori = kategori::create([
-                            'nama_kategori' => $request->kategori,
-                            // 'id_museum' => $request->nama,  
-                            'min' => 1,
-                            'max' => 500,
-                        ]);
-                $id_kategori = kategori::latest('id')->first();
+
+            $harga = harga::where('id_museum',$request->nama)->where('id_kategori',$request->kategori)->first();
+
+            
+
+
+            if($harga !== null)
+            {
+                return response()->json([
+                    'status'=> 220,
+                    'message'=>'Data Sudah Dibuat',
+                    'messagee'=>$harga,
+                ]);
+            }else{
                 harga::create([
                                 'id_museum' => $request->nama, 
-                                'id_kategori' => $id_kategori->id,
+                                'id_kategori' => $request->kategori,
                                 'hari_biasa' => $request->biasa,
                                 'hari_libur' => $request->libur
                             ]);
-
-                            return response()->json([
+    
+        
+                                     return response()->json([
                                             'status'=> 200,
-                                            'message'=>'Data Berhasil Ditambahkan',
+                                            'message'=>'Berhasil menambahkan Data ',
                                         ]);
-            // }
-        // return response()->json([
-        //                                     'status'=> 200,
-        //                                     'message'=>$nama_kategori,
-        //                                 ]);
+            }
+
 
         
     }
@@ -175,6 +181,12 @@ class MuseumController extends Controller
             $museum = new museum();
             $museum-> nama_museum = $request->input('nama_museum');
             $museum->save();
+            $id_museum = museum::latest('id')->first();
+            
+            $about = new about();
+            $about-> id_museum = $id_museum->id;
+            $about-> about = '<p>ini adalah Museum....</p>' ;
+            $about->save();
 
             return response()->json([
                 'status'=> 200,

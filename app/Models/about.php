@@ -10,6 +10,14 @@ class about extends Model
     use HasFactory;
     protected $table = 'about';
     protected $fillable =[
+        'id_museum',
         'about',
     ];
+
+    // protected $with = ['museum'];
+
+    public function museum()
+    {
+        return $this->belongsTo(museum::class, 'id', 'id');
+    }
 }

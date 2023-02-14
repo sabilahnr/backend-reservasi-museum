@@ -11,6 +11,7 @@ use Database\Seeders\tiket;
 use Illuminate\Http\Request;
 use App\Exports\PengunjungExport;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -220,8 +221,11 @@ class PengunjungController extends Controller
     {
         $dataPengunjung = Pengunjung::find($request->input('idData'));
 
+
+
         $dataPengunjung->id_admin=$request->input('idAdmin');
         $dataPengunjung->status = "Lunas";
+        $dataPengunjung->tanggal_pembayaran =  Carbon::now(); 
         $dataPengunjung->update();
 
         
@@ -229,6 +233,7 @@ class PengunjungController extends Controller
         $tiket = tikets::where('id_pengunjung', '=', $request->idData)->first();
         $tiket->status= "Lunas";
         $tiket->update();
+
     
         
         return response()->json([
