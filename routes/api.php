@@ -10,7 +10,10 @@ use App\Http\Controllers\API\PengunjungController;
 use App\Http\Controllers\API\FAQController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ControllerTransaksi;
 use App\Http\Controllers\PanduanController;
+use App\Http\Controllers\SliderController;
+use App\Http\Controllers\transaksi;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,12 +89,22 @@ Route::post('/add_admin', [AuthController::class, 'register']);
 Route::delete('/delete_admin/{id_admin}', [AuthController::class, 'destroy']);
 
 Route::get('/show_panduan', [PanduanController::class, 'index']);
+Route::get('/show_panduan/{id}', [PanduanController::class, 'index_panduan']);
 Route::get('/show_files', [PanduanController::class, 'index']);
 Route::post('/files', [PanduanController::class, 'upload']);
 Route::delete('/delete-image/{id}', [PanduanController::class, 'destroy']);
 
+Route::get('/show_slider', [SliderController::class, 'index']);
+// Route::get('/show_files', [SliderController::class, 'index']);
+Route::post('/upload_slider', [SliderController::class, 'upload']);
+Route::delete('/delete-slider/{id}', [SliderController::class, 'destroy']);
+
+
 // Route::get('/me',[AuthController::class, 'me']);
 
+Route::post('/callback',[ControllerTransaksi::class, 'callback']);
+Route::post('/transaksi_proses',[ControllerTransaksi::class, 'transaksi_proses']);
+Route::get('/metode',[ControllerTransaksi::class, 'metode']);
 
 
 

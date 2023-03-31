@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Panduan;
-use Illuminate\Support\Str;
+use App\Models\Slider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
-class PanduanController extends Controller
+class SliderController extends Controller
 {
     /**
      * Fetch images
@@ -16,15 +15,8 @@ class PanduanController extends Controller
      * @return JSON response
      */
     public function index() {
-            // $images = Panduan::max('10');
-            $images = DB::table('panduans')->whereBetween('id',array(2,10))->get() ;
-            return response()->json(["status" => "success","data" => $images]);
-        
-    }
-    public function index_panduan($id) {
-            $images = Panduan::find($id);
-            return response()->json(["status" => "success", "data" => $images]);
-        
+        $images = Slider::all();
+        return response()->json(["status" => "success", "count" => count($images), "data" => $images]);
     }
 
     /**
@@ -32,10 +24,9 @@ class PanduanController extends Controller
      * @param $request
      * @return JSON response
      */
-    public function  upload(Request $request) {
+    public function upload(Request $request) {
         $imagesName = [];
         $response = [];
-
 
         // return response()->json([
         //     'status'=> $request->all(),
@@ -57,8 +48,8 @@ class PanduanController extends Controller
                 $filename = Str::random(32).".".$image->getClientOriginalExtension();
                 $image->move('uploads/', $filename);
  
-                Panduan::create([
-                    'panduan_name' => $filename
+                Slider::create([
+                    'slider_name' => $filename
                 ]);
             }
  
@@ -75,7 +66,7 @@ class PanduanController extends Controller
 
     public function destroy($id)
     {
-        $files = Panduan::find($id);
+        $files = Slider::find($id);
         if($files)
         {
             $files->delete();

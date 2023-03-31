@@ -13,19 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tikets', function (Blueprint $table) {
+        Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_tiket');
-            $table->string('id_pengunjung');
             $table->string('nama');
-            $table->string('phone');
             $table->string('museum');
             $table->string('kategori');
-            $table->string('jumlah');
-            $table->string('harga');
-            $table->string('status')->nullable();
-            $table->string('kehadiran')->nullable();
-            $table->string('tanggal');
+            $table->string('phone');
+            $table->string('kota');
+            $table->string('harga_awal');
+            $table->string('status')->default('pending');
+            $table->string('invoice');
             $table->timestamps();
         });
     }
@@ -37,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tikets');
+        Schema::dropIfExists('transaksis');
     }
 };

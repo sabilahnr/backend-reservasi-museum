@@ -95,6 +95,7 @@ class PengunjungController extends Controller
         $kodetiket->kode_tiket = $hasil."-".$id_musuem.$id_kategori."-".$request->jumlah."-".$request->tanggal."-".$pengunjung->id  ;
         $kodetiket->id_pengunjung = $pengunjung->id ;
         $kodetiket->museum = $request->input('museum'); 
+        $kodetiket->phone = $request->input('phone'); 
         $kodetiket->kategori = $request->input('kategori');
         $kodetiket->jumlah = $request->input('jumlah'); 
         $kodetiket->tanggal = $request->input('tanggal'); 
@@ -122,10 +123,12 @@ class PengunjungController extends Controller
 
     public function show_pemasukan()
     {
-        $pemasukan = Pengunjung::select('pengunjung.*','users.name')
-                    ->join('users','users.id','=','pengunjung.id_admin')
-                    ->where('status', 'Lunas')
-                    ->get();
+        // $pemasukan = Pengunjung::select('pengunjung.*','users.name')
+        //             ->join('users','users.id','=','pengunjung.id_admin')
+        //             ->where('status', 'Lunas')
+        //             ->get();
+                    
+        $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
                     
         // $pemasukan? = Pengunjung::where('status', 1)->get();
         return response()->json([
@@ -165,6 +168,15 @@ class PengunjungController extends Controller
     public function show_ticket($kode)
     {
         $tiket =  DB::table('tikets')->where('kode_tiket',$kode)->first();
+        if($tiket === null)
+        {
+            $no_hp = DB::table('tikets')->where('phone',$kode)->first();
+            
+            return response()->json([
+            'status'=> 200,
+            'data'=>$no_hp,
+            ]);
+        }
         return response()->json([
         'status'=> 200,
         'data'=>$tiket,

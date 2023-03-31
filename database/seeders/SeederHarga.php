@@ -61,7 +61,7 @@ class SeederHarga extends Seeder
         harga::create([
             'id' => 6,
             'id_museum' => 1,
-            'id_kategori' => 5,
+            'id_kategori' => 6,
             'hari_biasa' => 15000,
             'hari_libur' => 20000
         ]);
