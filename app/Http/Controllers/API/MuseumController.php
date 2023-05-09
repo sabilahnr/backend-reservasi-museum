@@ -20,82 +20,71 @@ class MuseumController extends Controller
     {
         $museum = museum::all();
         return response()->json([
-            'status'=> 200,
-            'museum'=>$museum,
+            'status' => 200,
+            'museum' => $museum,
         ]);
     }
 
     public function validasi(Request $request)
-   {
-    $validator = Validator::make($request->all(),[
-        'nama'=>'required|max:191',
-        'kategori'=>'required|max:191',
-        'minimum' =>'required|numeric|min: 1',
-        'max' =>'required|numeric|min: 1',
-        'harga_biasa'=>'required|numeric|min:4',
-        'harga_libur'=>'required|numeric|min:4',
-    ],[
-        'nama.required' => 'Kolom nama wajib diisi',
-        'kategori.required' => 'Kolom kategori wajib diisi',
-        'min.required' => 'Kolom min wajib diisi',
-        'max.required' => 'Kolom max wajib diisi',
-        'harga_biasa.required' => 'Kolom harga_biasa wajib diisi',
-        'harga_libur.required' => 'Kolom harga_libur wajib diisi',
-    ]);
-
-    if($validator->fails())
     {
-        return response()->json([
-            'status'=> 422,
-            'validate_err'=> $validator->messages(),
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|max:191',
+            'kategori' => 'required|max:191',
+            'minimum' => 'required|numeric|min: 1',
+            'max' => 'required|numeric|min: 1',
+            'harga_biasa' => 'required|numeric|min:4',
+            'harga_libur' => 'required|numeric|min:4',
+        ], [
+            'nama.required' => 'Kolom nama wajib diisi',
+            'kategori.required' => 'Kolom kategori wajib diisi',
+            'min.required' => 'Kolom min wajib diisi',
+            'max.required' => 'Kolom max wajib diisi',
+            'harga_biasa.required' => 'Kolom harga_biasa wajib diisi',
+            'harga_libur.required' => 'Kolom harga_libur wajib diisi',
         ]);
-    }
-    else
-    {
-        return response()->json([
-            'status'=> 200,
-            'message'=>'Tervalidasi',
-        ]);
-    }
 
-  }
-
-  public function edit_show($id_category) 
-    {
-        $museum = museum::find($id_category);
-        
-        if($museum)
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'status'=> 200,
-                'museum' => $museum,
+                'status' => 422,
+                'validate_err' => $validator->messages(),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Tervalidasi',
             ]);
         }
-        else
-        {
+    }
+
+    public function edit_show($id_category)
+    {
+        $museum = museum::find($id_category);
+
+        if ($museum) {
             return response()->json([
-                'status'=> 404,
+                'status' => 200,
+                'museum' => $museum,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
                 'message' => 'No Museum Id Found',
             ]);
         }
-
     }
 
     public function destroy($id_museum)
     {
         $museum = museum::find($id_museum);
-        if($museum)
-        {
+        if ($museum) {
             $museum->delete();
             return response()->json([
-                'status'=> 200,
-                'message'=>'Museum Berhasil Dihapus',
+                'status' => 200,
+                'message' => 'Museum Berhasil Dihapus',
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json([
-                'status'=> 404,
+                'status' => 404,
                 'message' => 'Tidak ada ID Museum',
             ]);
         }
@@ -103,12 +92,12 @@ class MuseumController extends Controller
 
 
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         // $nama_kategori = DB::table('kategori')->where('nama_kategori',$request->kategori)->first();
 
         // $nama_kategori = DB::table('kategori')->where('id_museum',$request->nama)->where('nama_kategori',$request->kategori)->first();
-        
+
         //     if($nama_kategori !== null)
         //     {
         //         return response()->json([
@@ -119,109 +108,96 @@ class MuseumController extends Controller
         //     else
         //     {
 
-            $harga = harga::where('id_museum',$request->nama)->where('id_kategori',$request->kategori)->first();
-
-            
+        $kategori = kategori::where('id_museum', $request->nama)->first();
 
 
-            if($harga !== null)
-            {
-                return response()->json([
-                    'status'=> 220,
-                    'message'=>'Data Sudah Dibuat',
-                    'messagee'=>$harga,
-                ]);
-            }else{
-                harga::create([
-                                'id_museum' => $request->nama, 
-                                'id_kategori' => $request->kategori,
-                                'hari_biasa' => $request->biasa,
-                                'hari_libur' => $request->libur
-                            ]);
-    
-        
-                                     return response()->json([
-                                            'status'=> 200,
-                                            'message'=>'Berhasil menambahkan Data ',
-                                        ]);
-            }
 
 
-        
+        if ($kategori !== null) {
+            return response()->json([
+                'status' => 220,
+                'message' => 'Data Sudah Dibuat',
+                'messagee' => $kategori,
+            ]);
+        } else {
+            kategori::create([
+                'id_museum' => $request->nama,
+                'hari_biasa' => $request->biasa,
+                'hari_libur' => $request->libur
+            ]);
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil menambahkan Data ',
+            ]);
+        }
     }
 
-    public function update(Request $request,$id_museum)
+    public function update(Request $request, $id_museum)
     {
-        // $harga = harga::select('harga.*')->where('id', $id_category)->get();
         $museum = museum::find($id_museum);
-
         $museum->nama_museum = $request->input('museum');
         $museum->update();
 
         return response()->json([
-            'status'=> 200,
-            'message'=>'Berhasil Update Museum' + $museum ,
+            'status' => 200,
+            'message' => 'Berhasil Update Museum' + $museum,
         ]);
     }
 
-    public function store_museum(Request $request) 
+    public function store_museum(Request $request)
     {
-       
-        // $faq = museum::find($id_faq);
-        $nama_museum = DB::table('museum')->where('nama_museum',$request->nama_museum)->first();
-        if($nama_museum)
-        {
+        $nama_museum = DB::table('museum')->where('nama_museum', $request->nama_museum)->first();
+        if ($nama_museum) {
             return response()->json([
-                'status'=> 205,
-                'message'=>'Museum Sudah Ada',
+                'status' => 205,
+                'message' => 'Museum Sudah Ada',
             ]);
-        }
-        else
-        {
+        } else {
             $museum = new museum();
-            $museum-> nama_museum = $request->input('nama_museum');
+            $museum->nama_museum = $request->input('nama_museum');
             $museum->save();
             $id_museum = museum::latest('id')->first();
-            
+
             $about = new about();
-            $about-> id_museum = $id_museum->id;
-            $about-> about = '<p>ini adalah Museum....</p>' ;
+            $about->id_museum = $id_museum->id;
+            $about->about = '<p>ini adalah Museum....</p>';
             $about->save();
 
             return response()->json([
-                'status'=> 200,
-                'message'=>'Museum di tambahkan',
+                'status' => 200,
+                'message' => 'Museum di tambahkan',
             ]);
         }
-       
-    //     $museum = museum::create([
-    //         'nama_museum' => $request->nama,
-    //     ]);
-    //     if($museum) 
-    //     {
-    //         $id_museum = museum::latest('id')->first();
-    //         $kategori = kategori::create([
-    //             'nama_kategori' => $request->kategori,
-    //             'id_museum' => $id_museum->id,  
-    //             'min' => 1,
-    //             'max' => 500,
-    //         ]);
-    //         if($kategori)
-    //         {
-    //             $id_kategori = kategori::latest('id')->first();
-    //             harga::create([
-    //                 'id_museum' => $id_museum->id,
-    //                 'id_kategori' => $id_kategori->id,
-    //                 'hari_biasa' => $request->biasa,
-    //                 'hari_libur' => $request->libur
-    //             ]);
 
-    //             return response()->json([
-    //                 'status'=> 200,
-    //                 'message'=>'Row Inserted',
-    //             ]);
-    //         }
-    //     }
+        //     $museum = museum::create([
+        //         'nama_museum' => $request->nama,
+        //     ]);
+        //     if($museum) 
+        //     {
+        //         $id_museum = museum::latest('id')->first();
+        //         $kategori = kategori::create([
+        //             'nama_kategori' => $request->kategori,
+        //             'id_museum' => $id_museum->id,  
+        //             'min' => 1,
+        //             'max' => 500,
+        //         ]);
+        //         if($kategori)
+        //         {
+        //             $id_kategori = kategori::latest('id')->first();
+        //             harga::create([
+        //                 'id_museum' => $id_museum->id,
+        //                 'id_kategori' => $id_kategori->id,
+        //                 'hari_biasa' => $request->biasa,
+        //                 'hari_libur' => $request->libur
+        //             ]);
+
+        //             return response()->json([
+        //                 'status'=> 200,
+        //                 'message'=>'Row Inserted',
+        //             ]);
+        //         }
+        //     }
     }
 }
-

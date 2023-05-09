@@ -13,7 +13,7 @@ use Illuminate\Validation\Rules\Password;
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {
+    { 
         $user = User::where('email',$request->email)->first();
         if($user)
         {

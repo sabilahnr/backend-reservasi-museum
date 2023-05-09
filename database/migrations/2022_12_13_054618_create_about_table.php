@@ -18,6 +18,7 @@ return new class extends Migration
             // $table->integer('id_museum')->unsigned(); 
             $table->foreignId('id_museum')->references('id')->on('museum')->constrained()->onDelete('cascade'); 
             $table->longText('about'); 
+            $table->longText('about_en'); 
             $table->timestamps(); 
         });
     }

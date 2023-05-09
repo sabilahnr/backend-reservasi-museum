@@ -26,16 +26,11 @@ class PengunjungController extends Controller
         'negara'=>'nullable|max:191',
         'phone'=>'required|min:10|max:13',
         'jumlah'=>'required|max:191',
-        // 'foto.*'=>'nullable|mimes:application/pdf',
-        // 'harga_awal'=>'required|max:191',
-        // 'potongan_harga'=>'required|max:191',
-        // 'harga_akhir'=>'required|max:191',
         'museum'=>'required|max:191',
         'kategori'=>'required|max:191',
         'tanggal'=>'required|max:191',       
         'attachment.*'=>'nullable|image|mimes:jpg,png,jpeg,gif,svg',
         
-        // 'pembayaran'=>'required|max:191',
     ],[
         'nama.required' => 'Kolom nama wajib diisi',
         'kota.required' => 'Kolom kota wajib diisi',
@@ -101,6 +96,7 @@ class PengunjungController extends Controller
         $kodetiket->tanggal = $request->input('tanggal'); 
         $kodetiket->nama = $request->input('nama');
         $kodetiket->harga = $request->input('harga_awal');
+        $kodetiket->status = $request->input('status'); 
         $kodetiket->save();
 
         return response()->json([
@@ -191,10 +187,9 @@ class PengunjungController extends Controller
         //                 ->where('id_kategori',$id_category)
         //                 ->get();
 
-        $data = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori','kategori.min','kategori.max')
+        $data = kategori::select('kategori.*','museum.nama_museum')
                         ->where('id_kategori', $id_category)
-                        ->join('museum','museum.id','=','harga.id_museum')
-                        ->join('kategori','kategori.id','=','harga.id_kategori')
+                        ->join('museum','museum.id','=','kategori.id_museum')
                         ->get();
     
     

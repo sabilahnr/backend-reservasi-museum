@@ -12,8 +12,12 @@ class kategori extends Model
     protected $table = 'kategori';
     protected $fillable =[
         'nama_kategori',
+        'nama_kategori_en',
         'min',
         'max',
+        'id_museum',
+        'hari_biasa',
+        'hari_libur',
 
     ];
 
@@ -21,7 +25,7 @@ class kategori extends Model
         return $this->belongsTo('id_museum');
     }
 
-    public function harga(){
-        return $this->hasMany(harga::class);
+    public function kategori(){
+        return $this->hasMany(kategori::class);
     }
 }

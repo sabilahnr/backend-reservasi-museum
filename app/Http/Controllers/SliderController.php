@@ -35,12 +35,12 @@ class SliderController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'images' => 'required',
-                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
             ]
         );
  
         if($validator->fails()) {
-            return response()->json(["status" => "failed", "message" => "Validation error", "errors" => $validator->errors()]);
+            return response()->json(["status" => "failed", "message" => "Upload Gambar Tidak Berhasil", "Gagal" => $validator->errors()]);
         }
  
         if($request->has('images')) {

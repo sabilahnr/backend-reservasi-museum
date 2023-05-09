@@ -12,6 +12,7 @@ class about extends Model
     protected $fillable =[
         'id_museum',
         'about',
+        'about_en',
     ];
 
     // protected $with = ['museum'];

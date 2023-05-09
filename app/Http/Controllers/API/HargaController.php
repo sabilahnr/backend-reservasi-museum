@@ -12,15 +12,14 @@ class HargaController extends Controller
 {
     public function show()
     {
-        $harga = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori')
-                   ->join('museum','museum.id','=','harga.id_museum')
-                    ->join('kategori','kategori.id','=','harga.id_kategori')
+        $kategori = kategori::select('kategori.*','museum.nama_museum')
+                   ->join('museum','museum.id','=','kategori.id_museum')
                     ->get();
 
 
         return response()->json([
             'status'=> 200,
-            'harga'=>$harga,
+            'harga'=>$kategori,
         ]);
     }
 
@@ -28,36 +27,35 @@ class HargaController extends Controller
     {
         // $harga = harga::find($idHarga);
 
-        $harga = harga::select('harga.*','museum.nama_museum','kategori.nama_kategori','kategori.min','kategori.max')
+        $kategori = kategori::select('kategori.*','museum.nama_museum')
                         ->where('id_kategori', $id_category)
-                        ->join('museum','museum.id','=','harga.id_museum')
-                        ->join('kategori','kategori.id','=','harga.id_kategori')
+                        ->join('museum','museum.id','=','kategori.id_museum')
                         ->get();
-        if($harga)
+        if($kategori)
         {
             return response()->json([
                 'status'=> 200,
-                'harga' => $harga,
+                'harga' => $kategori,
             ]);
         }
         else
         {
             return response()->json([
                 'status'=> 404,
-                'message' => 'No Harga ID Found',
+                'message' => 'kategori ID Found',
             ]);
         }
 
     }
 
     public function update(Request $request,$id_category)
-    {
-        // $harga = harga::select('harga.*')->where('id', $id_category)->get();
-        $harga = harga::find($id_category);
-
-        $harga->hari_biasa = $request->input('biasa');
-        $harga->hari_libur = $request->input('libur');
-        $harga->update();
+    {   
+        $kategori = kategori::find($id_category);
+        $kategori->hari_biasa = $request->input('biasa');
+        $kategori->hari_libur = $request->input('libur');
+        $kategori->nama_kategori = $request->input('nama_kategori');
+        $kategori->nama_kategori_en = $request->input('nama_kategori_en');
+        $kategori->update();
 
         return response()->json([
             'status'=> 200,
@@ -65,14 +63,11 @@ class HargaController extends Controller
         ]);
     }
 
-    public function 
-    destroy($id_category)
+    public function destroy($id_category)
     {
-        $harga = harga::find($id_category);
         $kategori = kategori::find($id_category);
-        if($harga)
+        if($kategori)
         {
-            $harga->delete();
             $kategori->delete();
             return response()->json([
                 'status'=> 200,
