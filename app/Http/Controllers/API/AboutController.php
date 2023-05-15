@@ -34,6 +34,7 @@ class AboutController extends Controller
         $about = about::find($id_about);
 
         $about->about = $request->input('about');
+        $about->about_en = $request->input('about_en');
         $about->update();
 
         return response()->json([

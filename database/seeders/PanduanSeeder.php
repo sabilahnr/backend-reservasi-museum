@@ -18,6 +18,7 @@ class PanduanSeeder extends Seeder
         Panduan::create([
             'id' => 1,
             'panduan_name' =>'<p>Panduan Tiket dapat di lihat melalui</p>',
+            'panduan_name_en' =>'<p>How to Reserve this ticket....</p>',
         ]);
         // Panduan::create([
         //     'id' => 2,

@@ -28,7 +28,7 @@ class HargaController extends Controller
         // $harga = harga::find($idHarga);
 
         $kategori = kategori::select('kategori.*','museum.nama_museum')
-                        ->where('id_kategori', $id_category)
+                        ->where('kategori.id', $id_category)
                         ->join('museum','museum.id','=','kategori.id_museum')
                         ->get();
         if($kategori)
@@ -55,6 +55,8 @@ class HargaController extends Controller
         $kategori->hari_libur = $request->input('libur');
         $kategori->nama_kategori = $request->input('nama_kategori');
         $kategori->nama_kategori_en = $request->input('nama_kategori_en');
+        $kategori->min = $request->input('min');
+        $kategori->max = $request->input('max');
         $kategori->update();
 
         return response()->json([

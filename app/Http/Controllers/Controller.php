@@ -20,11 +20,13 @@ class Controller extends BaseController
     public function __construct()
     {
         $merchantCode = 'T20488';
-        $apiKey = 'DEV-65GkYUdqsUOkMlA0OUVaodmoXOjD0LdQEaGgeCrO';
-        $privateKey = '7RfDh-1amAs-dPUw4-P2YGL-A8nH8';
+        $apiKey = 'DEV-QimuixpQfJWLFWGaZI5NHYRyWBam6aNinoNONy6r';
+        $privateKey = '2kssQ-y2zKN-ZV1EG-iEq15-9iqgx';
         $mode = Constant::MODE_DEVELOPMENT;
+        $guzzleOptions = [];
         $client = new Client($merchantCode, $apiKey, $privateKey, $mode);
-        $this->tripay = new Merchant ($client);
+        // $this->tripay = new Merchant ($client);
+        $this->tripay = $client;
     }
 
 }

@@ -6,9 +6,9 @@ use App\Models\harga;
 
 use App\Models\museum;
 use App\Models\kategori;
+use App\Models\about;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\about;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -76,8 +76,15 @@ class MuseumController extends Controller
     public function destroy($id_museum)
     {
         $museum = museum::find($id_museum);
+        $about = about::where('id_museum',$id_museum)->get();
+        
+       
+        
+        
         if ($museum) {
+            kategori::where('id_museum',$id_museum)->delete();
             $museum->delete();
+            $about->delete();
             return response()->json([
                 'status' => 200,
                 'message' => 'Museum Berhasil Dihapus',
@@ -142,7 +149,7 @@ class MuseumController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Berhasil Update Museum' + $museum,
+            'message' => 'Berhasil Update Museum',
         ]);
     }
 
@@ -163,6 +170,7 @@ class MuseumController extends Controller
             $about = new about();
             $about->id_museum = $id_museum->id;
             $about->about = '<p>ini adalah Museum....</p>';
+            $about->about_en = '<p>This is Museum....</p>';
             $about->save();
 
             return response()->json([

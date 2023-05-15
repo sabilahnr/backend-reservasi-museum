@@ -37,7 +37,8 @@ class KategoriController extends Controller
     {
        
         // $faq = museum::find($id_faq);
-        $nama_kategori = kategori::where('nama_kategori',$request->nama_kategori)->first();
+        $nama_kategori = kategori::where('id_museum',$request->id_museum)->where('nama_kategori',$request->kategori)->first();
+        // $nama_kategori = kategori::where('nama_kategori',$request->kategori)->first();
         
 
         if($nama_kategori !== null)
@@ -50,14 +51,18 @@ class KategoriController extends Controller
         else
         {
             $kategori = new kategori();
-            $kategori-> nama_kategori = $request->input('nama_kategori');
+            $kategori-> id_museum = $request->input('id_museum');
+            $kategori-> nama_kategori = $request->input('kategori');
+            $kategori-> nama_kategori_en = $request->input('kategori_en');
+            $kategori-> hari_biasa = $request->input('biasa');
+            $kategori-> hari_libur = $request->input('libur');
             $kategori-> min = $request->input('min');
             $kategori-> max = $request->input('max');
             $kategori->save();
 
             return response()->json([
                 'status'=> 200,
-                'message'=>'kategori di tambahkan',
+                'message'=>"Berhasil Menambahkan Kategori",
             ]);
         }
     }

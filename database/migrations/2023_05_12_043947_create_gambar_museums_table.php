@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('panduans', function (Blueprint $table) {
+        Schema::create('gambar_museums', function (Blueprint $table) {
             $table->id();
-            $table->string('panduan_name')->nullable();
-            $table->string('panduan_name_en')->nullable();
+            $table->foreignId('id_museum')->references('id')->on('museum')->constrained();
+            $table->string('nama_gambar')->nullable();
             $table->timestamps();
+
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('panduans');
+        Schema::dropIfExists('gambar_museums');
     }
 };

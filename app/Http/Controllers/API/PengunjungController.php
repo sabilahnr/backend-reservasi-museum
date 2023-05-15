@@ -11,10 +11,12 @@ use Database\Seeders\tiket;
 use Illuminate\Http\Request;
 use App\Exports\PengunjungExport;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class PengunjungController extends Controller
 {
@@ -108,9 +110,14 @@ class PengunjungController extends Controller
 
     public function show()
     {
+        // $user = User::where('id' , Auth::id())->first();
+        // $user->getRoleNames();
+        
+       
         $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
                                 ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
                                 ->get();
+
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
@@ -123,10 +130,10 @@ class PengunjungController extends Controller
         //             ->join('users','users.id','=','pengunjung.id_admin')
         //             ->where('status', 'Lunas')
         //             ->get();
+        // $pemasukan? = Pengunjung::where('status', 1)->get();
                     
         $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
                     
-        // $pemasukan? = Pengunjung::where('status', 1)->get();
         return response()->json([
             'status'=> 200,
             'pemasukan'=>$pemasukan,
@@ -188,7 +195,7 @@ class PengunjungController extends Controller
         //                 ->get();
 
         $data = kategori::select('kategori.*','museum.nama_museum')
-                        ->where('id_kategori', $id_category)
+                        ->where('kategori.id', $id_category)
                         ->join('museum','museum.id','=','kategori.id_museum')
                         ->get();
     

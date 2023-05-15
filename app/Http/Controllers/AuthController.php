@@ -57,6 +57,7 @@ class AuthController extends Controller
     }
 
     public function me(){
+        
         $user = User::where('id' , Auth::id())->first();
         $user->getRoleNames();
 
@@ -64,11 +65,27 @@ class AuthController extends Controller
         return response()->json([
                 'status' => 200,
                 'user' => $user,
-            // 'token' => "masuk",
+                'token' => Auth::id(),
         ]);
 
 
     }
+    public function show(){
+        
+        $user = User::where('id' , Auth::id())->first();
+        $user->getRoleNames();
+
+        // return $this->JsonResponse(200, 'Data user sukses didapat', $user);
+        return response()->json([
+                'status' => 200,
+                'user' => $user,
+                'token' => Auth::id(),
+        ]);
+
+
+    }
+
+
 
     public function show_admin()
     {

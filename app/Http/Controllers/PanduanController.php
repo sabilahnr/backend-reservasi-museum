@@ -17,6 +17,7 @@ class PanduanController extends Controller
      */
     public function index() {
             // $images = Panduan::max('10');
+            // $images = DB::table('panduans')->whereBetween('id',array(2,10))->get() ;
             $images = DB::table('panduans')->whereBetween('id',array(2,10))->get() ;
             return response()->json(["status" => "success","data" => $images]);
         
@@ -92,4 +93,21 @@ class PanduanController extends Controller
             ]);
         }
     }
+
+
+    public function update_panduan_text(Request $request)
+    {
+
+        $panduan = Panduan::find(1);
+        $panduan->panduan_name = $request->input('panduan_name');
+        $panduan->panduan_name_en = $request->input('panduan_name_en');
+        $panduan->update();
+
+        return response()->json([
+            'status'=> 200,
+            'message'=>'Berhasil update panduan Text',
+        ]);
+
+    }
+
 }
