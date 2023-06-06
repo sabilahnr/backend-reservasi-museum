@@ -116,6 +116,7 @@ class PengunjungController extends Controller
        
         $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
                                 ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                                ->where('tikets.kehadiran', 'Hadir')
                                 ->get();
 
         return response()->json([
@@ -126,13 +127,12 @@ class PengunjungController extends Controller
 
     public function show_pemasukan()
     {
-        // $pemasukan = Pengunjung::select('pengunjung.*','users.name')
-        //             ->join('users','users.id','=','pengunjung.id_admin')
-        //             ->where('status', 'Lunas')
-        //             ->get();
-        // $pemasukan? = Pengunjung::where('status', 1)->get();
+        $pemasukan = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+                    ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                    ->where('tikets.status', 'Lunas')
+                    ->get();
                     
-        $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
+        // $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
                     
         return response()->json([
             'status'=> 200,
@@ -144,7 +144,7 @@ class PengunjungController extends Controller
     {
         // $pengunjung = Pengunjung::where('kehadiran', null)->get();
         $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                            ->where('pengunjung.kehadiran', null)
+                            // ->where('pengunjung.kehadiran', null)
                             ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
                             ->get();
 
@@ -159,7 +159,7 @@ class PengunjungController extends Controller
     public function showStatus()
     {
         $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                                ->where('pengunjung.status', 'belum lunas')
+                                // ->where('pengunjung.status', 'belum lunas')
                                 ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
                                 ->get();
         return response()->json([

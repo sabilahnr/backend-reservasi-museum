@@ -35,7 +35,7 @@ use App\Models\GambarMuseum;
     //     Route::name('auth.')
     //     ->prefix('auth')
     //     ->group(function () {
-    //         Route::get('/pengunjung', [PengunjungController::class, 'show']);
+
     //         Route::get('me', [AuthController::class, 'me'])->name('me');
     //     });
     // });
@@ -48,7 +48,6 @@ use App\Models\GambarMuseum;
         Route::put('/status', [PengunjungController::class, 'status']);
         Route::put('/kehadiran', [PengunjungController::class, 'kehadiran']);
         
-        Route::post('/add-pengunjung', [PengunjungController::class, 'store']);
         
         Route::post('/add_admin', [AuthController::class, 'register']);
         Route::delete('/delete_admin/{id_admin}', [AuthController::class, 'destroy']);
@@ -75,11 +74,13 @@ use App\Models\GambarMuseum;
         Route::post('/files', [PanduanController::class, 'upload']);
         
         Route::put('/update_panduan_text', [PanduanController::class, 'update_panduan_text']);
-        
-        Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
+        Route::get('/pengunjung', [PengunjungController::class, 'show']);
+        Route::get('/pemasukan', [PengunjungController::class, 'show_pemasukan']);
         
         
     });
+    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
+    Route::post('/add-pengunjung', [PengunjungController::class, 'store']);
     Route::post('/upload_gambar_museum/{museumId}', [GambarMuseumController::class, 'upload']);
     Route::post('/show_gambar_museum/{museumId}', [GambarMuseumController::class, 'show']);
 
@@ -87,7 +88,6 @@ use App\Models\GambarMuseum;
     Route::post('/validasi-pengunjung', [PengunjungController::class, 'validasi']);
     Route::get('/konfirmasi-pengunjung', [PengunjungController::class, 'showKonfirmasi']);
     Route::get('/status-pembayaran', [PengunjungController::class, 'showStatus']);
-    Route::get('/pemasukan', [PengunjungController::class, 'show_pemasukan']);
     Route::get('/pengunjungExport', [PengunjungController::class, 'pengunjungExport']);
     Route::get('show-ticket/{kode}', [PengunjungController::class, 'show_ticket']);
 
