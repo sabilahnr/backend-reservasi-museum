@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('jumlah');
             $table->string('harga_awal');
             $table->string('tanggal');
+            $table->string('email');
             $table->string('attachment')->nullable();
             $table->string('pembayaran');
             $table->string('id_admin')->nullable();

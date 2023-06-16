@@ -14,15 +14,4 @@ class museum extends Model
         'nama_museum',
 
     ];
-
-    protected $with = ['about'];
-
-    public function kategori(){
-        return $this->hasOne(kategori::class,'id_kategori');
-    }
-    public function about(){
-        return $this->hasOne(about::class, 'id_museum', 'id');
-    }
-    
-
 }

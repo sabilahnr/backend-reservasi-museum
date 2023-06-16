@@ -79,10 +79,13 @@ use App\Models\GambarMuseum;
         
         
     });
-    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
+
+    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show _data']);
     Route::post('/add-pengunjung', [PengunjungController::class, 'store']);
     Route::post('/upload_gambar_museum/{museumId}', [GambarMuseumController::class, 'upload']);
     Route::post('/show_gambar_museum/{museumId}', [GambarMuseumController::class, 'show']);
+    Route::delete('/delete-image/{id}', [GambarMuseumController::class, 'destroy']);
+
 
 
     Route::post('/validasi-pengunjung', [PengunjungController::class, 'validasi']);
@@ -113,7 +116,6 @@ use App\Models\GambarMuseum;
     
     Route::get('/show_panduan/{id}', [PanduanController::class, 'index_panduan']);
     Route::get('/show_files', [PanduanController::class, 'index']);
-    Route::delete('/delete-image/{id}', [PanduanController::class, 'destroy']);
     
     Route::get('/show_slider', [SliderController::class, 'index']);
     

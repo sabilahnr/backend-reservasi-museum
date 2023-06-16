@@ -123,8 +123,12 @@ class GambarMuseumController extends Controller
      * @param  \App\Models\GambarMuseum  $gambarMuseum
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GambarMuseum $gambarMuseum)
+    public function destroy(GambarMuseum $gambarMuseum,$idGambar)
     {
-        //
+        $images = GambarMuseum::where('idGambar',$idGambar)->get();
+        $images->delete();
+        
+        return response()->json(["status" => 200 ,"msg" => "Berhasil"]);
+
     }
 }
