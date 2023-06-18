@@ -31,7 +31,7 @@ class PengunjungController extends Controller
         'museum'=>'required|max:191',
         'kategori'=>'required|max:191',
         'tanggal'=>'required|max:191',       
-        
+         
     ],[
         'nama.required' => 'Kolom nama wajib diisi',
         'kota.required' => 'Kolom kota wajib diisi',
@@ -116,7 +116,6 @@ class PengunjungController extends Controller
        
         $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
                                 ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                                ->where('tikets.kehadiran', 'Hadir')
                                 ->get();
 
         return response()->json([

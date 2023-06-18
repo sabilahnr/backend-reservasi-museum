@@ -80,7 +80,7 @@ use App\Models\GambarMuseum;
         
     });
 
-    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show _data']);
+    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
     Route::post('/add-pengunjung', [PengunjungController::class, 'store']);
     Route::post('/upload_gambar_museum/{museumId}', [GambarMuseumController::class, 'upload']);
     Route::post('/show_gambar_museum/{museumId}', [GambarMuseumController::class, 'show']);
