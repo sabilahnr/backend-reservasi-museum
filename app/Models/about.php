@@ -17,8 +17,8 @@ class about extends Model
 
     // protected $with = ['museum'];
 
-    public function museum()
-    {
-        return $this->belongsTo(museum::class, 'id', 'id');
-    }
+    // public function museum()
+    // {
+    //     return $this->belongsTo(museum::class, 'id', 'id');
+    // }
 }
