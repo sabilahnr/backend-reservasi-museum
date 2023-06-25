@@ -10,11 +10,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
+
 class AuthController extends Controller
 {
     public function login(Request $request)
     { 
         $user = User::where('email',$request->email)->first();
+
+       
+
         if($user)
         {
             if(!Hash::check($request->password,$user->password))
@@ -24,6 +28,14 @@ class AuthController extends Controller
                     'message'=> 'Maaf, Password Anda salah Silahkan coba lagi',
                 ]);
             }
+        }
+        
+        if($user->status === 0)
+        {
+            return response()->json([
+                'status'=> 401,
+                'message'=> 'Maaf, Akun anda tidak aktif',
+            ]);
         }
 
         $data = [
@@ -151,6 +163,28 @@ class AuthController extends Controller
         if($admin)
         {
             $admin->delete();
+            return response()->json([
+                'status'=> 200,
+                'message'=>'Berhasil Delete admin',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=> 404,
+                'message' => 'No Admin ID Found',
+            ]);
+        }
+    }
+
+    public function update_admin($id_admin)
+    {
+        $admin = User::find($id_admin);
+        if($admin)
+        {
+            $admin->status = $admin->status == 1 ? 0 : 1;
+            $admin->save();
+
             return response()->json([
                 'status'=> 200,
                 'message'=>'Berhasil Delete admin',

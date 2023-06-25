@@ -16,8 +16,6 @@ class PanduanController extends Controller
      * @return JSON response
      */
     public function index() {
-            // $images = Panduan::max('10');
-            // $images = DB::table('panduans')->whereBetween('id',array(2,10))->get() ;
             $images = DB::table('panduans')->whereBetween('id',array(2,10))->get() ;
             return response()->json(["status" => "success","data" => $images]);
         
@@ -35,13 +33,7 @@ class PanduanController extends Controller
      */
     public function  upload(Request $request) {
         $imagesName = [];
-        $response = [];
-
-
-        // return response()->json([
-        //     'status'=> $request->all(),
-        // ]);
- 
+        $response = []; 
         $validator = Validator::make($request->all(),
             [
                 'images' => 'required',

@@ -41,12 +41,6 @@ class GambarMuseumController extends Controller
     public function  upload(Request $request, $museumId) {
         $imagesName = [];
         $response = [];
-
-
-        // return response()->json([
-        //     'status'=> $request->all(),
-        // ]);
- 
         $validator = Validator::make($request->all(),
             [
                 'images' => 'required',
@@ -78,8 +72,6 @@ class GambarMuseumController extends Controller
             $response["message"] = "Failed! image(s) not uploaded";
         }
         return response()->json($response);
-        // $images = DB::table('gambar_museums')->get() ;
-        // return response()->json(["status" => "success","data" => $images]);
     }
 
     /**

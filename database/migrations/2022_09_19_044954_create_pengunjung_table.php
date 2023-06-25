@@ -21,17 +21,17 @@ return new class extends Migration
             $table->string('kategori');
             $table->string('phone');
             $table->string('kota');
-            $table->string('negara')->nullable();
             $table->string('jumlah');
             $table->string('harga_awal');
             $table->string('tanggal');
             $table->string('email');
-            $table->string('attachment')->nullable();
             $table->string('pembayaran');
+            $table->string('kode_tiket')->nullable();
             $table->string('id_admin')->nullable();
             $table->string('status')->nullable();
             $table->string('kehadiran')->nullable();
             $table->string('tanggal_pembayaran')->nullable();
+            $table->string('tanggal_kehdiran')->nullable();
             $table->timestamps();
         });
     }

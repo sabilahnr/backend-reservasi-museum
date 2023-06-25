@@ -13,7 +13,7 @@ class transaksi extends Model
         'nama',
         'kota',
         'phone',
-        'museum',
+        'id_museum',
         'kategori',
         'harga_awal',
         'status',

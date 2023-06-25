@@ -78,9 +78,6 @@ class MuseumController extends Controller
         $museum = museum::find($id_museum);
         $about = about::where('id_museum',$id_museum)->get();
         
-       
-        
-        
         if ($museum) {
             kategori::where('id_museum',$id_museum)->delete();
             $museum->delete();
@@ -178,34 +175,5 @@ class MuseumController extends Controller
                 'message' => 'Museum di tambahkan',
             ]);
         }
-
-        //     $museum = museum::create([
-        //         'nama_museum' => $request->nama,
-        //     ]);
-        //     if($museum) 
-        //     {
-        //         $id_museum = museum::latest('id')->first();
-        //         $kategori = kategori::create([
-        //             'nama_kategori' => $request->kategori,
-        //             'id_museum' => $id_museum->id,  
-        //             'min' => 1,
-        //             'max' => 500,
-        //         ]);
-        //         if($kategori)
-        //         {
-        //             $id_kategori = kategori::latest('id')->first();
-        //             harga::create([
-        //                 'id_museum' => $id_museum->id,
-        //                 'id_kategori' => $id_kategori->id,
-        //                 'hari_biasa' => $request->biasa,
-        //                 'hari_libur' => $request->libur
-        //             ]);
-
-        //             return response()->json([
-        //                 'status'=> 200,
-        //                 'message'=>'Row Inserted',
-        //             ]);
-        //         }
-        //     }
     }
 }

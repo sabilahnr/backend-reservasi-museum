@@ -6,17 +6,17 @@ use App\Models\harga;
 use App\Models\museum;
 use App\Models\kategori;
 use App\Models\Pengunjung;
-use App\Models\tikets;
-use Database\Seeders\tiket;
 use Illuminate\Http\Request;
 use App\Exports\PengunjungExport;
 use App\Http\Controllers\Controller;
+use App\Mail\ConfirmationEmail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PengunjungController extends Controller
 {
@@ -73,7 +73,6 @@ class PengunjungController extends Controller
         $pengunjung->kategori = $request->input('kategori'); 
         $pengunjung->tanggal = $request->input('tanggal'); 
         $pengunjung->email = $request->input('email'); 
-        $pengunjung->attachment = $request->input('foto'); 
         $pengunjung->harga_awal = $request->input('harga_awal');
         $pengunjung->pembayaran = $request->input('pembayaran'); 
         $pengunjung->status = $request->input('status'); 
@@ -81,29 +80,22 @@ class PengunjungController extends Controller
 
         $kode_awal = preg_split("/\s+/", $request->museum);;
         $id_musuem = DB::table('museum')->where('nama_museum', $request->museum)->first()->id;
-        $id_kategori = DB::table('kategori')->where('nama_kategori', $request->kategori)->first()->id;
         $hasil = "";
 
         foreach ($kode_awal as $w) {
             $hasil .= mb_substr($w, 0, 1);
         }
+        $pengunjung->kode_tiket = $hasil."-".$id_musuem."-".$request->tanggal."-".$pengunjung->id  ;
+        $pengunjung->save();
         
-        $kodetiket = new tikets;
-        $kodetiket->kode_tiket = $hasil."-".$id_musuem.$id_kategori."-".$request->jumlah."-".$request->tanggal."-".$pengunjung->id  ;
-        $kodetiket->id_pengunjung = $pengunjung->id ;
-        $kodetiket->museum = $request->input('museum'); 
-        $kodetiket->phone = $request->input('phone'); 
-        $kodetiket->kategori = $request->input('kategori');
-        $kodetiket->jumlah = $request->input('jumlah'); 
-        $kodetiket->tanggal = $request->input('tanggal'); 
-        $kodetiket->nama = $request->input('nama');
-        $kodetiket->harga = $request->input('harga_awal');
-        $kodetiket->status = $request->input('status'); 
-        $kodetiket->save();
+        // $userEmail = $request->input('email');
+        // $confirmationEmail = new ConfirmationEmail($userData);
+
+        // Mail1::to($userEmail)->send($confirmationEmail);
 
         return response()->json([
             'status' => 200,
-            'kode_tiket' => $kodetiket->kode_tiket,
+            'kode_tiket' => $pengunjung->kode_tiket,
             'message' => "Berhasil",
         ]);
     }
@@ -114,9 +106,7 @@ class PengunjungController extends Controller
         // $user->getRoleNames();
         
        
-        $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                                ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                                ->get();
+        $pengunjung = Pengunjung::all();
 
         return response()->json([
             'status'=> 200,
@@ -126,10 +116,7 @@ class PengunjungController extends Controller
 
     public function show_pemasukan()
     {
-        $pemasukan = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                    ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                    ->where('tikets.status', 'Lunas')
-                    ->get();
+        $pemasukan = Pengunjung::all();
                     
         // $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
                     
@@ -141,14 +128,7 @@ class PengunjungController extends Controller
 
     public function showKonfirmasi()
     {
-        // $pengunjung = Pengunjung::where('kehadiran', null)->get();
-        $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                            // ->where('pengunjung.kehadiran', null)
-                            ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                            ->get();
-
-
-
+        $tiket = Pengunjung::all();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$tiket,
@@ -157,10 +137,7 @@ class PengunjungController extends Controller
 
     public function showStatus()
     {
-        $pengunjung = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                                // ->where('pengunjung.status', 'belum lunas')
-                                ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                                ->get();
+        $pengunjung = Pengunjung::all();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
@@ -169,15 +146,27 @@ class PengunjungController extends Controller
 
     public function show_ticket($kode)
     {
-        $tiket =  DB::table('tikets')->where('kode_tiket',$kode)->first();
-        if($tiket === null)
+
+        $tiket =  Pengunjung::where('kode_tiket',$kode)->get();
+        if($tiket->isEmpty())
         {
-            $no_hp = DB::table('tikets')->where('phone',$kode)->first();
+            $no_hp = DB::table('pengunjung')->where('phone',$kode)->get();
             
-            return response()->json([
-            'status'=> 200,
-            'data'=>$no_hp,
-            ]);
+            if($no_hp)
+            {
+
+                return response()->json([
+                    'status'=> 200,
+                    'data'=>$no_hp,
+                    ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=> 200,
+                    'msg'=>'Nomor atau kode tiket tidak ada ',
+                    ]);
+            }
         }
         return response()->json([
         'status'=> 200,
@@ -217,12 +206,9 @@ class PengunjungController extends Controller
     {
         $dataPengunjung = Pengunjung::find($request->input('idData'));
         $dataPengunjung->id_admin=$request->input('idAdmin');
+        $dataPengunjung->tanggal_kehadiran =  Carbon::now(); 
         $dataPengunjung->kehadiran = "Hadir";
         $dataPengunjung->update();
-
-        $tiket = tikets::where('id_pengunjung', '=', $request->idData)->first();
-        $tiket->kehadiran= "Hadir";
-        $tiket->update();
 
         return response()->json([
             'status'=> 200,
@@ -240,12 +226,6 @@ class PengunjungController extends Controller
         $dataPengunjung->status = "Lunas";
         $dataPengunjung->tanggal_pembayaran =  Carbon::now(); 
         $dataPengunjung->update();
-
-        
-        // $tiket = DB::table('tikets')->where('id_pengunjung',$request->idData)->limit(1);
-        $tiket = tikets::where('id_pengunjung', '=', $request->idData)->first();
-        $tiket->status= "Lunas";
-        $tiket->update();
 
     
         

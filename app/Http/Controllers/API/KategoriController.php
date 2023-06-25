@@ -14,7 +14,7 @@ class KategoriController extends Controller
     
     public function show($museumId)
     {
-        $kategori = kategori::where('kategori.id_museum',$museumId)
+        $kategori = kategori::where('id_museum',$museumId)                
                     ->get();                       
         
         return response()->json([
@@ -25,9 +25,7 @@ class KategoriController extends Controller
 
     public function show_kategori()
     {
-        $kategori = kategori::select('kategori.*','museum.nama_museum')
-                        ->join('museum','museum.id','=','kategori.id_museum')
-                        ->get();
+        $kategori = kategori::all();
         return response()->json([
             'status'=> 200,
             'kategori'=>$kategori,
@@ -39,7 +37,8 @@ class KategoriController extends Controller
     {
        
         // $faq = museum::find($id_faq);
-        $nama_kategori = kategori::where('nama_kategori',$request->nama_kategori)->first();
+        $nama_kategori = kategori::where('id_museum',$request->id_museum)->where('nama_kategori',$request->kategori)->first();
+        // $nama_kategori = kategori::where('nama_kategori',$request->kategori)->first();
         
 
         if($nama_kategori !== null)
@@ -52,20 +51,18 @@ class KategoriController extends Controller
         else
         {
             $kategori = new kategori();
-            
-            $kategori->id_museum = $request->id_museum;
-            $kategori->nama_kategori = $request->kategori;
-            $kategori->nama_kategori_en = $request->kategori_en;
-            $kategori->hari_biasa = $request->biasa;
-            $kategori->hari_libur = $request->libur;
-            $kategori->min = $request->min;
-            $kategori->max = $request->max;
-
+            $kategori-> id_museum = $request->input('id_museum');
+            $kategori-> nama_kategori = $request->input('kategori');
+            $kategori-> nama_kategori_en = $request->input('kategori_en');
+            $kategori-> hari_biasa = $request->input('biasa');
+            $kategori-> hari_libur = $request->input('libur');
+            $kategori-> min = $request->input('min');
+            $kategori-> max = $request->input('max');
             $kategori->save();
 
             return response()->json([
                 'status'=> 200,
-                'message'=>'kategori di tambahkan',
+                'message'=>"Berhasil Menambahkan Kategori",
             ]);
         }
     }
