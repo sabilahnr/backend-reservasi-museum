@@ -79,7 +79,8 @@ class MuseumController extends Controller
         $about = about::where('id_museum',$id_museum)->get();
         
         if ($museum) {
-            kategori::where('id_museum',$id_museum)->delete();
+            $kategori = kategori::where('id_museum',$id_museum);
+            $kategori->delete();
             $museum->delete();
             $about->delete();
             return response()->json([
@@ -169,6 +170,17 @@ class MuseumController extends Controller
             $about->about = '<p>ini adalah Museum....</p>';
             $about->about_en = '<p>This is Museum....</p>';
             $about->save();
+
+            $kategori = new kategori();
+            $kategori->id_museum = $id_museum->id;
+            $kategori->nama_kategori = 'Umum';
+            $kategori->nama_kategori_en = 'Public';
+            $kategori->hari_biasa = '0';
+            $kategori->hari_libur = '0';
+            $kategori->min = '1';
+            $kategori->max = '500';
+            $kategori->save();
+
 
             return response()->json([
                 'status' => 200,
