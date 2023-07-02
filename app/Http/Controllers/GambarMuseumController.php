@@ -117,8 +117,8 @@ class GambarMuseumController extends Controller
      */
     public function destroy(GambarMuseum $gambarMuseum,$idGambar)
     {
-        $images = GambarMuseum::where('idGambar',$idGambar)->get();
-        $images->delete();
+        $images = GambarMuseum::where('id',$idGambar)->delete();
+        // $images->delete();
         
         return response()->json(["status" => 200 ,"msg" => "Berhasil"]);
 

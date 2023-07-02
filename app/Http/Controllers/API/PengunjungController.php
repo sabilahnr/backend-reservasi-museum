@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\PemasukanExport;
 use App\Models\harga;
 use App\Models\museum;
 use App\Models\kategori;
@@ -235,13 +236,41 @@ class PengunjungController extends Controller
         ]);
     }
 
-    public function PengunjungExport()
-    {
-        
+    // public function PengunjungExport()
+    // {
+    //     return Excel::download(new PengunjungExport, 'pengunjung.xlsx');  
+    // }
 
-        return Excel::download(new PengunjungExport, 'pengunjung.xlsx');
-        // return [
-        //     (new DownloadExcel)->withFilename('users-' . time() . '.xlsx'),
-        // ];
+    public function PengunjungExport(Request $request)
+    {
+        // Ambil filter nama museum dan range waktu dari request
+        $museumName = $request->input('nama_museum');
+        $startDate = $request->input('start_date', Carbon::now()->subMonth());
+        $endDate = $request->input('end_date', Carbon::now());
+
+        // Format tanggal sesuai kebutuhan
+        $startDateTime = Carbon::parse($startDate)->startOfDay();
+        $endDateTime = Carbon::parse($endDate)->endOfDay();
+
+        // Inisialisasi objek export dengan filter nama museum dan range waktu
+        $export = new PengunjungExport($museumName, $startDateTime, $endDateTime);
+
+        // Lakukan unduhan (download) dengan menggunakan Maatwebsite/Laravel-Excel
+        return Excel::download($export, 'pengunjung.xlsx');
     }
+
+    public function pemasukanExport(Request $request)
+    {
+        $museumName = $request->input('nama_museum');
+        $startDate = $request->input('start_date', Carbon::now()->subMonth());
+        $endDate = $request->input('end_date', Carbon::now());
+    
+        $startDateTime = Carbon::parse($startDate)->startOfDay();
+        $endDateTime = Carbon::parse($endDate)->endOfDay();
+    
+        $export = new PemasukanExport($museumName, $startDateTime, $endDateTime);
+    
+        return Excel::download($export, 'pengunjung.xlsx');
+    }
+    
 }

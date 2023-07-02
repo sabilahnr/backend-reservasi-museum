@@ -19,10 +19,30 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
+    protected $museumName;
+    protected $startDateTime;
+    protected $endDateTime;
+
+    public function __construct($museumName, $startDateTime, $endDateTime)
     {
-        return Pengunjung::all();
+        $this->museumName = $museumName;
+        $this->startDateTime = $startDateTime;
+        $this->endDateTime = $endDateTime;
     }
+
+    public function collection()
+        {
+            return Pengunjung::query()
+                ->whereHas('museum', function ($query) {
+                    $query->where('nama_museum', $this->museumName);
+                })
+                ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime])
+                ->get();
+        }
+    // public function collection()
+    // {
+    //     return Pengunjung::all();
+    // }
 
     public function registerEvents(): array
     {
@@ -74,12 +94,4 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
             ],
         ];
     }
-    // public function map($user): array
-    // {
-    //     return [
-    //         $user->nama,
-    //         $user->museum,
-    //         // Date::dateTimeToExcel($user->created_at),
-    //     ];
-    // }
 }

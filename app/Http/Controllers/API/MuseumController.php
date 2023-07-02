@@ -79,10 +79,10 @@ class MuseumController extends Controller
         $about = about::where('id_museum',$id_museum)->get();
         
         if ($museum) {
-            $kategori = kategori::where('id_museum',$id_museum);
-            $kategori->delete();
+            $kategori = kategori::where('id_museum',$id_museum)->get();
+            $kategori->each->delete();
+            $about->each->delete();
             $museum->delete();
-            $about->delete();
             return response()->json([
                 'status' => 200,
                 'message' => 'Museum Berhasil Dihapus',

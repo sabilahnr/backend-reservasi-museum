@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin Role',
             'email' => 'admin@role.test',
+            'status' => '1',
             'password' => bcrypt('12345678')
         ]);
 
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
        
         $admin = User::create([
             'name' => 'Admin Samuel',
+            'status' => '1',
             'email' => 'adminsamuel@role.test',
             'password' => bcrypt('12345678')
         ]);
@@ -32,6 +34,7 @@ class UserSeeder extends Seeder
 
         $superadmin = User::create([
             'name' => 'Super Admin Role',
+            'status' => '1',
             'email' => 'superadmin@role.test',
             'password' => bcrypt('12345678')
         ]);
@@ -39,6 +42,7 @@ class UserSeeder extends Seeder
 
         $superadmin = User::create([
             'name' => 'Udin Super Admin Role',
+            'status' => '1',
             'email' => 'superadminudin@role.test',
             'password' => bcrypt('12345678')
         ]);
@@ -47,6 +51,7 @@ class UserSeeder extends Seeder
 
         $kepalauptmuseum = User::create([
             'name' => 'Pak Luthfi',
+            'status' => '1',
             'email' => 'kepalauptmuseum@role.test',
             'password' => bcrypt('12345678')
         ]);

@@ -24,40 +24,58 @@ class SliderController extends Controller
      * @param $request
      * @return JSON response
      */
-    public function upload(Request $request) {
-        $imagesName = [];
-        $response = [];
-        $validator = Validator::make($request->all(),
-            [
-                'images' => 'required',
-                'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-            ]
-        );
- 
-        if($validator->fails()) {
-            return response()->json(["status" => "failed", "message" => "Upload Gambar Tidak Berhasil", "Gagal" => $validator->errors()]);
-        }
- 
-        if($request->has('images')) {
-            foreach($request->file('images') as $image) {
-                $filename = Str::random(32).".".$image->getClientOriginalExtension();
-                $image->move('uploads/', $filename);
- 
-                Slider::create([
-                    'slider_name' => $filename
-                ]);
-            }
- 
-            $response["status"] = "successs";
-            $response["message"] = "Success! image(s) uploaded";
-        }
- 
-        else {
-            $response["status"] = "failed";
-            $response["message"] = "Failed! image(s) not uploaded";
-        }
-        return response()->json($response);
+    public function upload(Request $request)
+{
+    $imagesName = [];
+    $response = [];
+    
+
+    $validator = Validator::make($request->all(), [
+        'image' => 'required',
+        'image.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+    ]);
+    
+    if ($validator->fails()) {
+        return response()->json([
+            "status" => "failed",
+            "message" => "Upload Gambar Tidak Berhasil",
+            "Gagal" => $validator->errors()
+        ]);
     }
+    
+    // Menghitung jumlah gambar yang sudah tersimpan
+    $existingImagesCount = Slider::count();
+    
+    // Menentukan batas maksimal gambar
+    
+    // Memeriksa apakah jumlah gambar yang sudah tersimpan melebihi batas maksimal
+    if ($existingImagesCount >= 6) {
+        return response()->json([
+            "status" => "failed",
+            "message" => "Failed! Maximum number of images (6) reached"
+        ]);
+    }
+    
+    if ($request->has('image')) {
+        $image = $request->file('image');
+        $filename = Str::random(32) . "." . $image->getClientOriginalExtension();
+        $image->move('uploads/', $filename);
+    
+        Slider::create([
+            'slider_name' => $filename
+        ]);
+    
+        $response["status"] = "success";
+        $response["message"] = "Success! image uploaded";
+    } else {
+        $response["status"] = "failed";
+        $response["message"] = "Failed! image not uploaded";
+    }
+    
+    return response()->json($response);
+    
+}
+
 
     public function destroy($id)
     {
