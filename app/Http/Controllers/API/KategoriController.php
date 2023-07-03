@@ -25,7 +25,10 @@ class KategoriController extends Controller
 
     public function show_kategori()
     {
-        $kategori = kategori::all();
+        // $kategori = kategori::all();
+        $kategori = kategori::select('kategori.*','museum.nama_museum')
+                        ->join('museum','museum.id','=','kategori.id_museum')
+                        ->get();
         return response()->json([
             'status'=> 200,
             'kategori'=>$kategori,

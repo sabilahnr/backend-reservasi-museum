@@ -32,6 +32,8 @@ class FAQController extends Controller
 
         $faq->question = $request->input('question');
         $faq->answer = $request->input('answer');
+        $faq->question_en = $request->input('question_en');
+        $faq->answer_en = $request->input('answer_en');
         $faq->update();
 
         return response()->json([
@@ -46,6 +48,8 @@ class FAQController extends Controller
 
         $faq->question = $request->input('question');
         $faq->answer = $request->input('answer');
+        $faq->question_en = $request->input('question_en');
+        $faq->answer_en = $request->input('answer_en');
         $faq->save();
 
         return response()->json([

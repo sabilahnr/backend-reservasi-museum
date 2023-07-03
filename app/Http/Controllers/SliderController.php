@@ -46,8 +46,6 @@ class SliderController extends Controller
     // Menghitung jumlah gambar yang sudah tersimpan
     $existingImagesCount = Slider::count();
     
-    // Menentukan batas maksimal gambar
-    
     // Memeriksa apakah jumlah gambar yang sudah tersimpan melebihi batas maksimal
     if ($existingImagesCount >= 6) {
         return response()->json([

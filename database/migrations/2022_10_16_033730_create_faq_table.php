@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('faq', function (Blueprint $table) {
             $table->id();
             $table->string('question');
+            $table->string('question_en');
             $table->string('answer');
+            $table->string('answer_en');
             $table->timestamps();
         });
     }

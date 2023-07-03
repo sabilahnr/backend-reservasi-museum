@@ -9,6 +9,7 @@ use App\Models\kategori;
 use App\Models\about;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\GambarMuseum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -74,26 +75,32 @@ class MuseumController extends Controller
     }
 
     public function destroy($id_museum)
-    {
-        $museum = museum::find($id_museum);
-        $about = about::where('id_museum',$id_museum)->get();
-        
-        if ($museum) {
-            $kategori = kategori::where('id_museum',$id_museum)->get();
-            $kategori->each->delete();
-            $about->each->delete();
-            $museum->delete();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Museum Berhasil Dihapus',
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Tidak ada ID Museum',
-            ]);
-        }
+{
+    $museum = museum::find($id_museum);
+    
+    if ($museum) {
+        $kategori = kategori::where('id_museum', $id_museum)->get();
+        $about = about::where('id_museum', $id_museum)->get();
+        $gambar = GambarMuseum::where('id_museum', $id_museum)->get();
+
+        $kategori->each->delete();
+        $about->each->delete();
+        $gambar->each->delete();
+
+        $museum->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Museum Berhasil Dihapus',
+        ]);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Tidak ada ID Museum',
+        ]);
     }
+}
+
 
 
 

@@ -11,6 +11,8 @@ class faq extends Model
     protected $table = 'faq';
     protected $fillable =[
         'answer',
+        'answer_en',
         'question',
+        'question_en',
     ];
 }

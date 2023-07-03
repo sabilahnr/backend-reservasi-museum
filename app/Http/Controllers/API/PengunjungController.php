@@ -18,6 +18,12 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Client;
+use SendinBlue\Client\Configuration;
+use SendinBlue\Client\Api\TransactionalEmailsApi;
+use SendinBlue\Client\Model\SendSmtpEmail;
+use SendinBlue\Client\Model\SendSmtpEmailSender;
+use SendinBlue\Client\ApiException;
 
 class PengunjungController extends Controller
 {
@@ -79,15 +85,62 @@ class PengunjungController extends Controller
         $pengunjung->status = $request->input('status'); 
         $pengunjung->save();
 
-        $kode_awal = preg_split("/\s+/", $request->museum);;
+        
+        $kode_awal = preg_split("/\s+/", $request->museum);
         $id_musuem = DB::table('museum')->where('nama_museum', $request->museum)->first()->id;
         $hasil = "";
+
 
         foreach ($kode_awal as $w) {
             $hasil .= mb_substr($w, 0, 1);
         }
         $pengunjung->kode_tiket = $hasil."-".$id_musuem."-".$request->tanggal."-".$pengunjung->id  ;
         $pengunjung->save();
+
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
+        $apiInstance = new TransactionalEmailsApi(new Client(), $config);
+
+    $to = [
+        [
+            'email' => $request->input('email'),
+            'name' => $request->input('nama'),
+        ]
+    ];
+
+    $sendSmtpEmail = new SendSmtpEmail();
+    $sendSmtpEmail->setTo($to);
+    $sendSmtpEmail->setSender(new SendSmtpEmailSender(["name" => "UPT Museum Surakarta", "email" => "samuelsteven@student.uns.ac.id"]));
+    $sendSmtpEmail->setSubject("Berhasil melakukan Reservasi Tiket Museum");
+    $sendSmtpEmail->setHtmlContent("
+        Hallo, {$request->input('nama')}!<br><br>
+        Anda berhasil melakukan reservasi tiket museum di {$request->input('museum')}!<br><br>
+        Informasi lengkap:<br>
+            nama = {$request->input('nama')} <br>
+            kota = {$request->input('kota')} <br>
+            phone = {$request->input('phone')} <br>
+            jumlah = {$request->input('jumlah')} <br>
+            museum = {$request->input('museum')} <br>
+            kategori = {$request->input('kategori')} <br>
+            tanggal = {$request->input('tanggal')} <br>
+            email = {$request->input('email')} <br>
+            harga_awal = {$request->input('harga_awal')}<br>
+            pembayaran = {$request->input('pembayaran')} <br><br>
+        Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
+        Kode TIket anda adalah Anda: {$pengunjung->kode_tiket}<br><br>
+        UPT Museum Surakarta
+    ");
+
+    try {
+        $apiInstance->sendTransacEmail($sendSmtpEmail);
+    }catch (ApiException $e) {
+        // Penanganan kesalahan jika gagal mengirim email
+        return response()->json([
+            'status' => 'gagal',
+            'message' => $e->getMessage()
+        ]);
+    }
+
+
         
         // $userEmail = $request->input('email');
         // $confirmationEmail = new ConfirmationEmail($userData);

@@ -16,6 +16,12 @@ use App\Models\transaksi;
 use Database\Seeders\tiket;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use GuzzleHttp\Client as CLIENGUZ;
+use SendinBlue\Client\Configuration;
+use SendinBlue\Client\Api\TransactionalEmailsApi;
+use SendinBlue\Client\Model\SendSmtpEmail;
+use SendinBlue\Client\Model\SendSmtpEmailSender;
+use SendinBlue\Client\ApiException;
 
 class ControllerTransaksi extends Controller
 {
@@ -65,7 +71,7 @@ class ControllerTransaksi extends Controller
 
        
 
-        $pengunjung = new Pengunjung();
+        $pengunjung = new Pengunjung;
         $pengunjung->nama = $request->input('nama'); 
         $pengunjung->kota = $request->input('kota'); 
         $pengunjung->phone = $request->input('phone'); 
@@ -73,32 +79,23 @@ class ControllerTransaksi extends Controller
         $pengunjung->museum = $request->input('museum'); 
         $pengunjung->kategori = $request->input('kategori'); 
         $pengunjung->tanggal = $request->input('tanggal'); 
+        $pengunjung->email = $request->input('email'); 
         $pengunjung->harga_awal = $request->input('harga_awal');
         $pengunjung->pembayaran = 'non-tunai'; 
         $pengunjung->status = 'belom lunas'; 
         $pengunjung->save();
 
-        $kode_awal = preg_split("/\s+/", $request->museum);;
+        
+        $kode_awal = preg_split("/\s+/", $request->museum);
         $id_musuem = DB::table('museum')->where('nama_museum', $request->museum)->first()->id;
-        $id_kategori = DB::table('kategori')->where('nama_kategori', $request->kategori)->first()->id;
         $hasil = "";
+
 
         foreach ($kode_awal as $w) {
             $hasil .= mb_substr($w, 0, 1);
         }
-        
-        $kodetiket = new tikets();
-        $kodetiket->kode_tiket = $hasil."-".$id_musuem.$id_kategori."-".$request->jumlah."-".$request->tanggal."-".$pengunjung->id  ;
-        $kodetiket->id_pengunjung = $pengunjung->id ;
-        $kodetiket->museum = $request->input('museum'); 
-        $kodetiket->phone = $request->input('phone'); 
-        $kodetiket->kategori = $request->input('kategori');
-        $kodetiket->jumlah = $request->input('jumlah'); 
-        $kodetiket->tanggal = $request->input('tanggal'); 
-        $kodetiket->nama = $request->input('nama');
-        $kodetiket->harga = $request->input('harga_awal');
-        $kodetiket->status = 'belom lunas'; 
-        $kodetiket->save();
+        $pengunjung->kode_tiket = $hasil."-".$id_musuem."-".$request->tanggal."-".$pengunjung->id  ;
+        $pengunjung->save();
 
         $transaksi = new transaksi();
         $transaksi-> nama =  $nama;
@@ -232,9 +229,14 @@ class ControllerTransaksi extends Controller
             $invoice = transaksi::where('invoice', $data->merchant_ref)
                 ->where('status', '=', 'pending')
                 ->first();
+                
+                 
+                
 
-            $pengunjung = Pengunjung::where('id',$invoice->id_museum);
-            $tiket = tikets::where('id',$invoice->id_museum);
+            // $pengunjung = Pengunjung::where('id',$invoice->id_museum);
+            $pengunjung = Pengunjung::find($invoice->id_museum);
+            
+             
 
             if (! $invoice) {
                 return Response::json([
@@ -247,7 +249,52 @@ class ControllerTransaksi extends Controller
                 case 'PAID':
                     $invoice->update(['status' => 'Lunas']);
                     $pengunjung->update(['status' => 'Lunas']);
-                    $tiket->update(['status' => 'Lunas']);
+
+                  
+                    $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
+                    $apiInstance = new TransactionalEmailsApi(new CLIENGUZ(), $config);
+
+
+                $to = [
+                    [
+                        'email' => $pengunjung->email,
+                        'name' => $pengunjung->nama,
+                    ]
+                ];
+
+                $sendSmtpEmail = new SendSmtpEmail();
+                $sendSmtpEmail->setTo($to);
+                $sendSmtpEmail->setSender(new SendSmtpEmailSender(["name" => "UPT Museum Surakarta", "email" => "samuelsteven@student.uns.ac.id"]));
+                $sendSmtpEmail->setSubject("Berhasil melakukan Reservasi Tiket Museum");
+                $sendSmtpEmail->setHtmlContent("
+                    Hallo, {$pengunjung->nama}!<br><br>
+                    Anda berhasil melakukan reservasi tiket museum di {$pengunjung->museum}!<br><br>
+                    Informasi lengkap:<br>
+                        nama = {$pengunjung->nama} <br>
+                        kota = {$pengunjung->kota} <br>
+                        phone = {$pengunjung->phone} <br>
+                        jumlah = {$pengunjung->jumlah} <br>
+                        museum = {$pengunjung->museum} <br>
+                        kategori = {$pengunjung->kategori} <br>
+                        tanggal = {$pengunjung->tanggal} <br>
+                        email = {$pengunjung->email} <br>
+                        harga_awal = {$pengunjung->harga_awal}<br>
+                        pembayaran = {$pengunjung->pembayaran} <br><br>
+                    Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
+                    Kode TIket anda adalah Anda: {$pengunjung->kode_tiket}<br><br>
+                    UPT Museum Surakarta
+                ");
+
+                try {
+                    $apiInstance->sendTransacEmail($sendSmtpEmail);
+                }catch (ApiException $e) {
+                    // Penanganan kesalahan jika gagal mengirim email
+                    return response()->json([
+                        'status' => 'gagal',
+                        'message' => $e->getMessage()
+                    ]);
+                }
+
                     break;
 
                 case 'EXPIRED':

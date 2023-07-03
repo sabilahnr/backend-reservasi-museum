@@ -46,7 +46,7 @@ use App\Models\GambarMuseum;
         // Auth
         Route::get('me', [AuthController::class, 'me'])->name('auth.me');
         
-        // Pengunjung
+        // Pengunjung  
         Route::get('pengunjung', [PengunjungController::class, 'show']);
         Route::put('/status', [PengunjungController::class, 'status']);
         Route::put('/kehadiran', [PengunjungController::class, 'kehadiran']);
@@ -76,8 +76,7 @@ use App\Models\GambarMuseum;
         // admin
         Route::post('/add_admin', [AuthController::class, 'register']);
         Route::delete('/delete_admin/{id_admin}', [AuthController::class, 'destroy']);
-        Route::get('/show_admin', [AuthController::class, 'show_admin']);
-        Route::put('/status_admin/{id_admin}', [AuthController::class, 'update_admin']);
+
 
         // Slider
         Route::post('/upload_slider', [SliderController::class, 'upload']);
@@ -104,8 +103,8 @@ use App\Models\GambarMuseum;
     Route::get('/status-pembayaran', [PengunjungController::class, 'showStatus']);
     Route::get('/pengunjungExport', [PengunjungController::class, 'pengunjungExport']);
     Route::get('/pemasukanExport', [PengunjungController::class, 'pemasukanExport']);
-    // Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
     
+    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
     // About
     Route::get('/show_about/{id_museum}',[AboutController::class, 'show']);
     Route::get('/edit_about/{id_about}',[AboutController::class, 'edit_show']);
@@ -135,6 +134,7 @@ use App\Models\GambarMuseum;
     Route::get('/show_panduan', [PanduanController::class, 'index']);
     Route::get('/show_panduan/{id}', [PanduanController::class, 'index_panduan']);
     Route::get('/show_files', [PanduanController::class, 'index']);
+    Route::delete('/delete_files/{id}', [PanduanController::class, 'destroy']);
     
     // Pembayaran
     Route::post('/transaksi_proses',[ControllerTransaksi::class, 'transaksi_proses']);
@@ -142,6 +142,9 @@ use App\Models\GambarMuseum;
     Route::post('/callback',[ControllerTransaksi::class, 'callback']);
     Route::post('/callback_handle',[ControllerTransaksi::class, 'handle']);
     // Route::post('/callback',[ControllerTransaksi::class, 'callback']);
+
+    Route::get('/show_admin', [AuthController::class, 'show_admin']);
+    Route::put('/status_admin/{id_admin}', [AuthController::class, 'update_admin']);
     
 
     // Route::get('/edit-harga/{id_category}', [HargaController::class, 'edit_show']);

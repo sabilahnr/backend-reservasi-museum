@@ -17,8 +17,10 @@ class SeederFAQ extends Seeder
     {
         faq::create([
             'id' => 1,
-            'answer' =>'Apakah didalam museum diperbolehkan makan atau minum?',
-            'question' =>'Selama didalam Museum tidak diperkenankan makan atau minum ya'
+            'question' =>'Apakah didalam museum diperbolehkan makan atau minum?',
+            'answer' =>'Selama didalam Museum tidak diperkenankan makan atau minum ya',
+            'question_en' =>'Can i Bring food and beverage in museum ?',
+            'answer_en' =>'NO, You can not'
         ]);
     }
 }
