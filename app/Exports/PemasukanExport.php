@@ -31,15 +31,23 @@ class PemasukanExport implements FromCollection, WithHeadings ,WithStyles, WithE
         $this->endDateTime = $endDateTime;
     }
     public function collection()
-{
-    return Pengunjung::query()
-        ->select('tanggal', 'id_admin', 'nama', 'harga_awal')
-        ->whereHas('museum', function ($query) {
-            $query->where('nama_museum', $this->museumName);
-        })
-        ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime])
-        ->get();
-}
+    {
+        $query = Pengunjung::query()
+            ->select('tanggal', 'id_admin', 'nama', 'harga_awal','museum')
+            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime]);
+    
+        // Cek apakah nama museum ada atau tidak
+        if (!is_null($this->museumName)) {
+            $query->whereHas('museum', function ($query) {
+                $query->where('nama_museum', $this->museumName);
+            });
+        }
+    
+        return $query->get();
+    }
+    
+
+
 
 public function registerEvents(): array
 {
@@ -75,6 +83,7 @@ public function styles(Worksheet $sheet)
             'ID Admin',
             'Nama',
             'Pemasukan',
+            'Nama Museum',
         ],
     ];
 }

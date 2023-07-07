@@ -296,19 +296,27 @@ class PengunjungController extends Controller
 
     public function PengunjungExport(Request $request)
     {
-        // Ambil filter nama museum dan range waktu dari request
         $museumName = $request->input('nama_museum');
         $startDate = $request->input('start_date', Carbon::now()->subMonth());
-        $endDate = $request->input('end_date', Carbon::now());
-
-        // Format tanggal sesuai kebutuhan
+        $endDate = $request->input('end_date', Carbon::now()); 
+        
+        
+    
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
+        
+        if ($museumName) {
 
-        // Inisialisasi objek export dengan filter nama museum dan range waktu
-        $export = new PengunjungExport($museumName, $startDateTime, $endDateTime);
-
-        // Lakukan unduhan (download) dengan menggunakan Maatwebsite/Laravel-Excel
+            // Inisialisasi objek export dengan filter nama museum dan range waktu
+            $export = new PengunjungExport($museumName, $startDateTime, $endDateTime);
+        } else {
+   
+            // Inisialisasi objek export tanpa filter nama museum, namun dengan range waktu
+            $export = new PengunjungExport(null, $startDateTime, $endDateTime);
+        }
+    
+        // $export = new PemasukanExport($museumName, $startDateTime, $endDateTime);
+    
         return Excel::download($export, 'pengunjung.xlsx');
     }
 
@@ -320,10 +328,19 @@ class PengunjungController extends Controller
     
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
-    
-        $export = new PemasukanExport($museumName, $startDateTime, $endDateTime);
-    
+
+        if ($museumName) {
+
+            // Inisialisasi objek export dengan filter nama museum dan range waktu
+            $export = new PemasukanExport($museumName, $startDateTime, $endDateTime);
+        } else {
+   
+            // Inisialisasi objek export tanpa filter nama museum, namun dengan range waktu
+            $export = new PemasukanExport(null, $startDateTime, $endDateTime);
+        }
+        
         return Excel::download($export, 'pengunjung.xlsx');
+    
     }
     
 }

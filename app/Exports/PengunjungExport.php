@@ -30,15 +30,20 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
         $this->endDateTime = $endDateTime;
     }
 
-    public function collection()
-        {
-            return Pengunjung::query()
-                ->whereHas('museum', function ($query) {
-                    $query->where('nama_museum', $this->museumName);
-                })
-                ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime])
-                ->get();
+     public function collection()
+    {
+        $query = Pengunjung::query()
+            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime]);
+
+        // Cek apakah nama museum ada atau tidak
+        if ($this->museumName) {
+            $query->whereHas('museum', function ($query) {
+                $query->where('nama_museum', $this->museumName);
+            });
         }
+
+        return $query->get();
+    }
     // public function collection()
     // {
     //     return Pengunjung::all();
