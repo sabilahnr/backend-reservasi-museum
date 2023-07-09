@@ -212,7 +212,6 @@ class ControllerTransaksi extends Controller
         }
 
         $data = json_decode($json);
-    //   return response()->json($data);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             return Response::json([

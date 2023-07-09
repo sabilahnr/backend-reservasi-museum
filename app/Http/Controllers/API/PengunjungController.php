@@ -115,16 +115,16 @@ class PengunjungController extends Controller
         Hallo, {$request->input('nama')}!<br><br>
         Anda berhasil melakukan reservasi tiket museum di {$request->input('museum')}!<br><br>
         Informasi lengkap:<br>
-            nama = {$request->input('nama')} <br>
-            kota = {$request->input('kota')} <br>
-            phone = {$request->input('phone')} <br>
-            jumlah = {$request->input('jumlah')} <br>
-            museum = {$request->input('museum')} <br>
-            kategori = {$request->input('kategori')} <br>
-            tanggal = {$request->input('tanggal')} <br>
-            email = {$request->input('email')} <br>
-            harga_awal = {$request->input('harga_awal')}<br>
-            pembayaran = {$request->input('pembayaran')} <br><br>
+            Nama = {$request->input('nama')} <br>
+            Kota = {$request->input('kota')} <br>
+            Nomor HP = {$request->input('phone')} <br>
+            Jumlah Pengunjung = {$request->input('jumlah')} <br>
+            Museum = {$request->input('museum')} <br>
+            Kategori = {$request->input('kategori')} <br>
+            Tanggal = {$request->input('tanggal')} <br>
+            Email = {$request->input('email')} <br>
+            Harga = {$request->input('harga_awal')}<br>
+            Pembayaran = {$request->input('pembayaran')} <br><br>
         Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
         Kode TIket anda adalah Anda: {$pengunjung->kode_tiket}<br><br>
         UPT Museum Surakarta
@@ -170,9 +170,9 @@ class PengunjungController extends Controller
 
     public function show_pemasukan()
     {
-        $pemasukan = Pengunjung::all();
+        // $pemasukan = Pengunjung::all();
                     
-        // $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
+        $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
                     
         return response()->json([
             'status'=> 200,
@@ -182,7 +182,8 @@ class PengunjungController extends Controller
 
     public function showKonfirmasi()
     {
-        $tiket = Pengunjung::all();
+        // $tiket = Pengunjung::all();
+        $tiket =  DB::table('pengunjung')->where('status','Hadir')->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$tiket,
@@ -192,6 +193,10 @@ class PengunjungController extends Controller
     public function showStatus()
     {
         $pengunjung = Pengunjung::all();
+        $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+                            // ->where('pengunjung.kehadiran', null)
+                            ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+                            ->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,

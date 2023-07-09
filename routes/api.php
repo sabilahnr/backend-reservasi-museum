@@ -100,6 +100,7 @@ use App\Models\GambarMuseum;
     Route::get('show-ticket/{kode}', [PengunjungController::class, 'show_ticket']);
     Route::post('/validasi-pengunjung', [PengunjungController::class, 'validasi']);
     Route::get('/konfirmasi-pengunjung', [PengunjungController::class, 'showKonfirmasi']);
+    Route::get('/konfirmasi-', [PengunjungController::class, 'showKonfirmasi']);
     Route::get('/status-pembayaran', [PengunjungController::class, 'showStatus']);
     Route::get('/pengunjungExport', [PengunjungController::class, 'pengunjungExport']);
     Route::get('/pemasukanExport', [PengunjungController::class, 'pemasukanExport']);
