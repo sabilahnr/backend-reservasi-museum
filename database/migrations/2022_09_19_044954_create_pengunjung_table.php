@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('kehadiran')->nullable();
             $table->string('tanggal_pembayaran')->nullable();
-            $table->string('tanggal_kehdiran')->nullable();
+            $table->string('tanggal_kehadiran')->nullable();
             $table->timestamps();
         });
     }

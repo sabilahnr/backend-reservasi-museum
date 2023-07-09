@@ -81,6 +81,9 @@ class PengunjungController extends Controller
         $pengunjung->tanggal = $request->input('tanggal'); 
         $pengunjung->email = $request->input('email'); 
         $pengunjung->harga_awal = $request->input('harga_awal');
+        if($request->input('harga_awal') == 0) {
+            $pengunjung->tanggal_pembayaran = Carbon::now();
+        }
         $pengunjung->pembayaran = $request->input('pembayaran'); 
         $pengunjung->status = $request->input('status'); 
         $pengunjung->save();
@@ -169,21 +172,22 @@ class PengunjungController extends Controller
     }
 
     public function show_pemasukan()
-    {
-        // $pemasukan = Pengunjung::all();
-                    
-        $pemasukan =  DB::table('pengunjung')->where('status','Lunas')->get();
-                    
-        return response()->json([
-            'status'=> 200,
-            'pemasukan'=>$pemasukan,
-        ]);
-    }
+{
+    $pemasukan = DB::table('pengunjung')
+                    ->where('status', 'Lunas')
+                    ->where('harga_awal', '<>', '0')
+                    ->get();
+                
+    return response()->json([
+        'status' => 200,
+        'pemasukan' => $pemasukan,
+    ]);
+}
 
     public function showKonfirmasi()
     {
         // $tiket = Pengunjung::all();
-        $tiket =  DB::table('pengunjung')->where('status','Hadir')->get();
+        $tiket =  DB::table('pengunjung')->where('kehadiran','Hadir')->get();
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$tiket,
@@ -192,11 +196,13 @@ class PengunjungController extends Controller
 
     public function showStatus()
     {
-        $pengunjung = Pengunjung::all();
-        $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
-                            // ->where('pengunjung.kehadiran', null)
-                            ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
-                            ->get();
+        // $pengunjung = Pengunjung::all();
+        // $tiket = Pengunjung::select('pengunjung.*','tikets.kode_tiket')
+        //                     // ->where('pengunjung.kehadiran', null)
+        //                     ->join('tikets','tikets.id_pengunjung','=','pengunjung.id')
+        //                     ->get();
+        $pengunjung =  DB::table('pengunjung')->where('status','Lunas')->get();
+
         return response()->json([
             'status'=> 200,
             'pengunjung'=>$pengunjung,
