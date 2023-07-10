@@ -94,6 +94,7 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
                 'kehadiran',
                 'Status',
                 'Tanggal Pembayaran',
+                'Tanggal Kehadiran',
                 'Created At',
                 'Update At',
             ],

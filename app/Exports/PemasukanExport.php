@@ -34,7 +34,8 @@ class PemasukanExport implements FromCollection, WithHeadings ,WithStyles, WithE
     {
         $query = Pengunjung::query()
             ->select('tanggal', 'id_admin', 'nama', 'harga_awal','museum')
-            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime]);
+            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime])
+            ->where('status', 'Lunas');
     
         // Cek apakah nama museum ada atau tidak
         if (!is_null($this->museumName)) {
