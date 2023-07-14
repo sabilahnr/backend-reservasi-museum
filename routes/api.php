@@ -45,13 +45,13 @@ use App\Models\GambarMuseum;
         
         // Auth
         Route::get('me', [AuthController::class, 'me'])->name('auth.me');
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
         
         // Pengunjung  
-        Route::get('pengunjung', [PengunjungController::class, 'show']);
-        Route::put('/status', [PengunjungController::class, 'status']);
-        Route::put('/kehadiran', [PengunjungController::class, 'kehadiran']);
-        Route::get('/pengunjung', [PengunjungController::class, 'show']);
-        Route::get('/pemasukan', [PengunjungController::class, 'show_pemasukan']);
+        Route::put('/status', [ControllerTransaksi::class, 'status']);
+        Route::put('/kehadiran', [ControllerTransaksi::class, 'kehadiran']);
+        Route::get('/pengunjung', [ControllerTransaksi::class, 'show']);
+        Route::get('/pemasukan', [ControllerTransaksi::class, 'show_pemasukan']);
 
         // About
         Route::put('/update_about/{id_about}',[AboutController::class, 'update']);
@@ -96,16 +96,16 @@ use App\Models\GambarMuseum;
     Route::post('/login', [AuthController::class, 'login']); 
 
     // Pengunjung
-    Route::post('/add-pengunjung', [PengunjungController::class, 'store']);
-    Route::get('show-ticket/{kode}', [PengunjungController::class, 'show_ticket']);
-    Route::post('/validasi-pengunjung', [PengunjungController::class, 'validasi']);
-    Route::get('/konfirmasi-pengunjung', [PengunjungController::class, 'showKonfirmasi']);
-    Route::get('/konfirmasi-', [PengunjungController::class, 'showKonfirmasi']);
-    Route::get('/status-pembayaran', [PengunjungController::class, 'showStatus']);
-    Route::get('/pengunjungExport', [PengunjungController::class, 'pengunjungExport']);
-    Route::get('/pemasukanExport', [PengunjungController::class, 'pemasukanExport']);
+    Route::post('/add-pengunjung', [ControllerTransaksi::class, 'store']);
+    Route::get('show-ticket/{kode}', [ControllerTransaksi::class, 'show_ticket']);
+    Route::post('/validasi-pengunjung', [ControllerTransaksi::class, 'validasi']);
+    Route::get('/konfirmasi-pengunjung', [ControllerTransaksi::class, 'showKonfirmasi']);
+    Route::get('/konfirmasi-', [ControllerTransaksi::class, 'showKonfirmasi']);
+    Route::get('/status-pembayaran', [ControllerTransaksi::class, 'showStatus']);
+    Route::get('/pengunjungExport', [ControllerTransaksi::class, 'pengunjungExport']);
+    Route::get('/pemasukanExport', [ControllerTransaksi::class, 'pemasukanExport']);
     
-    Route::post('/show_data/{id_category}', [PengunjungController::class, 'show_data']);
+    Route::post('/show_data/{id_category}', [ControllerTransaksi::class, 'show_data']);
     // About
     Route::get('/show_about/{id_museum}',[AboutController::class, 'show']);
     Route::get('/edit_about/{id_about}',[AboutController::class, 'edit_show']);

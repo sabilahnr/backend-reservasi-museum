@@ -71,6 +71,7 @@ class PengunjungController extends Controller
    }
     public function store(Request $request)
     {  
+        
         $pengunjung = new Pengunjung;
         $pengunjung->nama = $request->input('nama'); 
         $pengunjung->kota = $request->input('kota'); 
@@ -100,48 +101,48 @@ class PengunjungController extends Controller
         $pengunjung->kode_tiket = $hasil."-".$id_musuem."-".$request->tanggal."-".$pengunjung->id  ;
         $pengunjung->save();
 
-        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
         $apiInstance = new TransactionalEmailsApi(new Client(), $config);
 
-    $to = [
-        [
-            'email' => $request->input('email'),
-            'name' => $request->input('nama'),
-        ]
-    ];
+        $to = [
+            [
+                'email' => $request->input('email'),
+                'name' => $request->input('nama'),
+            ]
+        ];
 
-    $sendSmtpEmail = new SendSmtpEmail();
-    $sendSmtpEmail->setTo($to);
-    $sendSmtpEmail->setSender(new SendSmtpEmailSender(["name" => "UPT Museum Surakarta", "email" => "samuelsteven@student.uns.ac.id"]));
-    $sendSmtpEmail->setSubject("Berhasil melakukan Reservasi Tiket Museum");
-    $sendSmtpEmail->setHtmlContent("
-        Hallo, {$request->input('nama')}!<br><br>
-        Anda berhasil melakukan reservasi tiket museum di {$request->input('museum')}!<br><br>
-        Informasi lengkap:<br>
-            Nama = {$request->input('nama')} <br>
-            Kota = {$request->input('kota')} <br>
-            Nomor HP = {$request->input('phone')} <br>
-            Jumlah Pengunjung = {$request->input('jumlah')} <br>
-            Museum = {$request->input('museum')} <br>
-            Kategori = {$request->input('kategori')} <br>
-            Tanggal = {$request->input('tanggal')} <br>
-            Email = {$request->input('email')} <br>
-            Harga = {$request->input('harga_awal')}<br>
-            Pembayaran = {$request->input('pembayaran')} <br><br>
-        Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
-        Kode TIket anda adalah Anda: {$pengunjung->kode_tiket}<br><br>
-        UPT Museum Surakarta
-    ");
+        $sendSmtpEmail = new SendSmtpEmail();
+        $sendSmtpEmail->setTo($to);
+        $sendSmtpEmail->setSender(new SendSmtpEmailSender(["name" => "UPT Museum Surakarta", "email" => "samuelsteven@student.uns.ac.id"]));
+        $sendSmtpEmail->setSubject("Berhasil melakukan Reservasi Tiket Museum");
+        $sendSmtpEmail->setHtmlContent("
+            Hallo, {$request->input('nama')}!<br><br>
+            Anda berhasil melakukan reservasi tiket museum di {$request->input('museum')}!<br><br>
+            Informasi lengkap:<br>
+                Nama = {$request->input('nama')} <br>
+                Kota = {$request->input('kota')} <br>
+                Nomor HP = {$request->input('phone')} <br>
+                Jumlah Pengunjung = {$request->input('jumlah')} <br>
+                Museum = {$request->input('museum')} <br>
+                Kategori = {$request->input('kategori')} <br>
+                Tanggal = {$request->input('tanggal')} <br>
+                Email = {$request->input('email')} <br>
+                Harga = {$request->input('harga_awal')}<br>
+                Pembayaran = {$request->input('pembayaran')} <br><br>
+            Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
+            Kode TIket anda adalah Anda: {$pengunjung->kode_tiket}<br><br>
+            UPT Museum Surakarta
+        ");
 
-    try {
-        $apiInstance->sendTransacEmail($sendSmtpEmail);
-    }catch (ApiException $e) {
-        // Penanganan kesalahan jika gagal mengirim email
-        return response()->json([
-            'status' => 'gagal',
-            'message' => $e->getMessage()
-        ]);
-    }
+        try {
+            $apiInstance->sendTransacEmail($sendSmtpEmail);
+        }catch (ApiException $e) {
+            // Penanganan kesalahan jika gagal mengirim email
+            return response()->json([
+                'status' => 'gagal',
+                'message' => $e->getMessage()
+            ]);
+        }
 
 
         
@@ -300,10 +301,6 @@ class PengunjungController extends Controller
         ]);
     }
 
-    // public function PengunjungExport()
-    // {
-    //     return Excel::download(new PengunjungExport, 'pengunjung.xlsx');  
-    // }
 
     public function PengunjungExport(Request $request)
     {

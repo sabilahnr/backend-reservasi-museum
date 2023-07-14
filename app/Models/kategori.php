@@ -21,9 +21,10 @@ class kategori extends Model
 
     ];
 
-    // public function museum(){
-    //     return $this->belongsTo('id_museum');
-    // }
+    public function museum()
+    {
+        return $this->belongsTo(Museum::class, 'id_museum');
+    }
 
     // public function kategori(){
     //     return $this->hasMany(kategori::class);

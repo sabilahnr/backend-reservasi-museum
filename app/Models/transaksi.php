@@ -11,12 +11,25 @@ class transaksi extends Model
     protected $table = 'transaksis';
     protected $fillable = [
         'nama',
+        'id_kategori',
         'kota',
-        'phone',
-        'id_museum',
-        'kategori',
-        'harga_awal',
+        'jumlah',
+        'total_harga',
+        'tanggal',
+        'email',
+        'pembayaran',
+        'kode_tiket',
+        'id_admin',
+        'kehadiran',
+        'tanggal_pembayaran',
+        'tanggal_kehadiran',
         'status',
         'invoice',
     ];
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'id_kategori');
+    }
+    
+    
 }

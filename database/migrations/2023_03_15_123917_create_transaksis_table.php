@@ -16,14 +16,25 @@ return new class extends Migration
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('id_museum');
-            $table->string('kategori');
+            $table->unsignedBigInteger('id_kategori'); // Menggunakan tipe data unsignedBigInteger
             $table->string('phone');
             $table->string('kota');
-            $table->string('harga_awal');
+            $table->string('jumlah');
+            $table->string('total_harga');
+            $table->string('tanggal');
+            $table->string('email');
+            $table->string('pembayaran');
+            $table->string('kode_tiket')->nullable();
+            $table->string('id_admin')->nullable();
+            $table->string('kehadiran')->nullable();
             $table->string('status')->default('pending');
-            $table->string('invoice');
+            $table->string('tanggal_pembayaran')->nullable();
+            $table->string('tanggal_kehadiran')->nullable();
+            $table->string('invoice')->nullable();
             $table->timestamps();
+
+            // Definisikan kunci asing ke tabel kategori
+            $table->foreign('id_kategori')->references('id')->on('kategori');
         });
     }
 

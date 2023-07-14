@@ -56,9 +56,18 @@ class SliderController extends Controller
     
     if ($request->has('image')) {
         $image = $request->file('image');
-        $filename = Str::random(32) . "." . $image->getClientOriginalExtension();
+        $lastSlider = Slider::latest()->first();
+        if ($lastSlider) {
+            $newSliderId = $lastSlider->id + 1;
+        } else {
+            // Jika belum ada data sama sekali
+            $newSliderId = 1;
+        }
+        $filename = "Gambar_Slider".$newSliderId . "." . $image->getClientOriginalExtension();
         $image->move('uploads/', $filename);
-    
+        
+        
+
         Slider::create([
             'slider_name' => $filename
         ]);

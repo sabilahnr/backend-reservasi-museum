@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pengunjung;
+use App\Models\transaksi;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -14,40 +15,35 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, WithEvents, ShouldAutoSize
+class PengunjungExport implements FromCollection, WithHeadings, WithStyles, WithEvents, ShouldAutoSize,WithMapping
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    protected $museumName;
+    protected $idMuseum;
     protected $startDateTime;
     protected $endDateTime;
 
-    public function __construct($museumName, $startDateTime, $endDateTime)
+    public function __construct($idMuseum, $startDateTime, $endDateTime)
     {
-        $this->museumName = $museumName;
+        $this->idMuseum = $idMuseum;
         $this->startDateTime = $startDateTime;
         $this->endDateTime = $endDateTime;
     }
 
-     public function collection()
+    public function collection()
     {
-        $query = Pengunjung::query()
-            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime]);
+        $query = transaksi::query()
+            ->join('kategori', 'transaksis.id_kategori', '=', 'kategori.id')
+            ->join('museum', 'kategori.id_museum', '=', 'museum.id')
+            ->whereBetween('transaksis.created_at', [$this->startDateTime, $this->endDateTime]);
 
-        // Cek apakah nama museum ada atau tidak
-        if ($this->museumName) {
-            $query->whereHas('museum', function ($query) {
-                $query->where('nama_museum', $this->museumName);
-            });
+        if ($this->idMuseum) {
+            $query->where('museum.id', $this->idMuseum);
         }
 
         return $query->get();
     }
-    // public function collection()
-    // {
-    //     return Pengunjung::all();
-    // }
 
     public function registerEvents(): array
     {
@@ -72,6 +68,29 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
         ];
     }
 
+    public function map($transaksi): array
+    {
+        return [
+            $transaksi->id,
+            $transaksi->nama,
+            $transaksi->kategori->museum->nama_museum,
+            $transaksi->kategori->nama_kategori,
+            $transaksi->phone,
+            $transaksi->kota,
+            $transaksi->jumlah,
+            $transaksi->total_harga,
+            $transaksi->tanggal,
+            $transaksi->pembayaran,
+            $transaksi->id_admin,
+            $transaksi->kehadiran,
+            $transaksi->status,
+            $transaksi->tanggal_pembayaran,
+            $transaksi->tanggal_kehadiran,
+            $transaksi->created_at,
+            $transaksi->updated_at,
+        ];
+    }
+
     public function headings(): array
     {
         return [
@@ -84,11 +103,9 @@ class PengunjungExport implements FromCollection, WithHeadings ,WithStyles, With
                 'Kategori',
                 'Phone',
                 'Kota',
-                'Negara',
                 'jumlah',
                 'Harga Awal',
                 'Tanggal Reservasi',
-                'Attachment',
                 'Pembayaran',
                 'Nama Admin',
                 'kehadiran',

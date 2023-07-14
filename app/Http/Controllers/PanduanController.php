@@ -47,7 +47,15 @@ class PanduanController extends Controller
  
         if($request->has('images')) {
             foreach($request->file('images') as $image) {
-                $filename = Str::random(32).".".$image->getClientOriginalExtension();
+                $lastSlider = Panduan::latest()->first();
+                if ($lastSlider) {
+                    $newSliderId = $lastSlider->id + 1;
+                } else {
+                    // Jika belum ada data sama sekali
+                    $newSliderId = 1;
+                }
+                $filename = "Gambar_Slider".$newSliderId . "." . $image->getClientOriginalExtension();
+               
                 $image->move('uploads/', $filename);
  
                 Panduan::create([

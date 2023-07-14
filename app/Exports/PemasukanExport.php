@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pengunjung;
+use App\Models\transaksi;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -14,35 +15,34 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class PemasukanExport implements FromCollection, WithHeadings ,WithStyles, WithEvents, ShouldAutoSize
+class PemasukanExport implements FromCollection, WithHeadings ,WithStyles, WithEvents, ShouldAutoSize, WithMapping
 {
     /**
     * @return \Illuminate\Support\Collection
     */
 
-    protected $museumName;
+    protected $idMuseum;
     protected $startDateTime;
     protected $endDateTime;
 
-    public function __construct($museumName, $startDateTime, $endDateTime)
+    public function __construct($idMuseum, $startDateTime, $endDateTime)
     {
-        $this->museumName = $museumName;
+        $this->idMuseum = $idMuseum;
         $this->startDateTime = $startDateTime;
         $this->endDateTime = $endDateTime;
     }
     public function collection()
     {
-        $query = Pengunjung::query()
-            ->select('tanggal', 'id_admin', 'nama', 'harga_awal','museum')
-            ->whereBetween('created_at', [$this->startDateTime, $this->endDateTime])
+        $query = transaksi::query()
+            ->join('kategori', 'transaksis.id_kategori', '=', 'kategori.id')
+            ->join('museum', 'kategori.id_museum', '=', 'museum.id')
+            // ->select('tanggal', 'id_admin', 'nama', 'harga_awal','museum')
+            ->whereBetween('transaksis.created_at', [$this->startDateTime, $this->endDateTime])
             ->where('status', 'Lunas');
     
-        // Cek apakah nama museum ada atau tidak
-        if (!is_null($this->museumName)) {
-            $query->whereHas('museum', function ($query) {
-                $query->where('nama_museum', $this->museumName);
-            });
-        }
+            if ($this->idMuseum) {
+                $query->where('museum.id', $this->idMuseum);
+            }
     
         return $query->get();
     }
@@ -55,7 +55,7 @@ public function registerEvents(): array
     return [
         AfterSheet::class => function(AfterSheet $event) {
             $event->sheet->getDelegate()->mergeCells('A1:E1')->getStyle('A1:E1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $event->sheet->getDelegate()->getStyle('A3:D3')
+            $event->sheet->getDelegate()->getStyle('A3:E3')
             ->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()
@@ -77,7 +77,7 @@ public function styles(Worksheet $sheet)
     public function headings(): array
 {
     return [
-        ['Laporan data Pengunjung UPTD Museum'],
+        ['Laporan data Pendapatan UPTD Museum'],
         [''],
         [
             'Tanggal',
@@ -86,6 +86,17 @@ public function styles(Worksheet $sheet)
             'Pemasukan',
             'Nama Museum',
         ],
+    ];
+}
+
+public function map($transaksi): array
+{
+    return [
+        $transaksi->updated_at,
+        $transaksi->id_admin,
+        $transaksi->nama,
+        $transaksi->total_harga,
+        $transaksi->kategori->museum->nama_museum,
     ];
 }
 

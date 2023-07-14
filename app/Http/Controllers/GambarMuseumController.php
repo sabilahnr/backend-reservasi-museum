@@ -55,8 +55,15 @@ class GambarMuseumController extends Controller
             $response = [];
     
             $image = $request->file('image');
-            $filename = Str::random(32) . "." . $image->getClientOriginalExtension();
-            $image->move('uploads/', $filename);
+            $lastSlider = GambarMuseum::latest()->first();
+            if ($lastSlider) {
+                $newSliderId = $lastSlider->id + 1;
+            } else {
+                // Jika belum ada data sama sekali
+                $newSliderId = 1;
+            }
+            $filename = "Gambar_Museum".$newSliderId . "." . $image->getClientOriginalExtension();
+           $image->move('uploads/', $filename);
     
             GambarMuseum::create([
                 'id_museum' => $museumId,

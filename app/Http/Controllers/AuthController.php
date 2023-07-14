@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use GuzzleHttp\Client as CLIENGUZ;
+use SendinBlue\Client\Configuration;
+use SendinBlue\Client\Api\TransactionalEmailsApi;
+use SendinBlue\Client\Model\SendSmtpEmail;
+use SendinBlue\Client\Model\SendSmtpEmailSender;
+use SendinBlue\Client\ApiException;
+use Illuminate\Support\Str;
 
 
 class AuthController extends Controller
@@ -112,35 +119,61 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', Password::min(8)->letters()
-                                                                    ->mixedCase()
-                                                                    ->numbers()
-                                                                    ->symbols()
-                                                                    ->uncompromised()
-                                                                ],
-        ]);
+
+        $rawPassword = Str::random(8); // Generate password acak
+
+        $hashedPassword = Hash::make($rawPassword); // Hash password sebelum menyimpannya
 
         
-        if($validator->fails())
-        {
-            return response()->json([
-                'status'=> 422,
-                'validate_err'=> $validator->messages(),
-            ]);
-        }
-        else
-        {
+
             $user = new User();
             $user->name = ucwords(strtolower($request->nama));
             $user->email = strtolower($request->email);
-            $user->password = Hash::make($request->password);
+            
+            $user->password = $hashedPassword;
             $save = $user->save();
             $user->syncRoles('admin');
-        }
 
         if($save)
         {
+            $apiKey = $_ENV['SENDINBLUE_API_KEY'];
+
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $apiKey);
+        $apiInstance = new TransactionalEmailsApi(new CLIENGUZ(), $config);
+
+        $to = [
+            [
+                'email' => $request->input('email'),
+                'name' => $request->input('nama'),
+            ]
+        ];
+
+        $sendSmtpEmail = new SendSmtpEmail();
+        $sendSmtpEmail->setTo($to);
+        $sendSmtpEmail->setSender(new SendSmtpEmailSender(["name" => "UPTD Museum Surakarta", "email" => "samuelsteven@student.uns.ac.id"]));
+        $sendSmtpEmail->setSubject("Berhasil Menambahkan Admin Baru");
+        $sendSmtpEmail->setHtmlContent("
+            Hallo, {$request->input('nama')}!<br><br>
+            Anda menjadi admin UPTD Museum! <br><br>
+            Informasi lengkap:<br>
+                Nama = {$request->input('nama')} <br>
+                Email = {$request->input('email')} <br>
+                Password = {$rawPassword} <br>
+            Jika Anda memiliki pertanyaan atau membutuhkan bantuan, bisa menghubungi tim IT .<br><br>
+            UPT Museum Surakarta
+        ");
+
+        try {
+            $apiInstance->sendTransacEmail($sendSmtpEmail);
+        }catch (ApiException $e) {
+            // Penanganan kesalahan jika gagal mengirim email
+            return response()->json([
+                'status' => 'gagal',
+                'message' => $e->getMessage()
+            ]);
+        }
+
+
             return response()->json([
                 'status' => 200,
                 'message' => "Berhasil Menambahkan Admin",
@@ -198,4 +231,48 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function changePassword(Request $request)
+{
+    $user = Auth::user();
+    $currentPassword = $request->input('current_password');
+    $newPassword = $request->input('new_password');
+
+    // Periksa kecocokan password saat ini
+    if (!Hash::check($currentPassword, $user->password)) {
+        return response()->json([
+            'status' => 401,
+            'message' => 'Password saat ini tidak cocok',
+        ]);
+    }
+
+    // Validasi password baru
+    $validator = Validator::make($request->all(), [
+        'new_password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Password baru tidak valid',
+            'errors' => $validator->errors(),
+        ]);
+    }
+
+    // Ubah password pengguna
+    $user->password = Hash::make($newPassword);
+    $user->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Password berhasil diubah',
+    ]);
+}
+
+
+
+
+
+
+
 }
