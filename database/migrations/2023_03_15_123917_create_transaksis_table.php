@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('tanggal');
             $table->string('email');
             $table->string('pembayaran');
+            $table->string('channel_pembayaran')->nullable();
             $table->string('kode_tiket')->nullable();
             $table->string('id_admin')->nullable();
             $table->string('kehadiran')->nullable();

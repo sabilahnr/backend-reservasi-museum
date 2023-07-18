@@ -131,6 +131,7 @@ class AuthController extends Controller
             $user->email = strtolower($request->email);
             
             $user->password = $hashedPassword;
+            $user->status = '1';
             $save = $user->save();
             $user->syncRoles('admin');
 
@@ -237,6 +238,14 @@ class AuthController extends Controller
     $user = Auth::user();
     $currentPassword = $request->input('current_password');
     $newPassword = $request->input('new_password');
+
+    // Periksa kecocokan password saat ini
+    if ($currentPassword !== $user->password) {
+        return response()->json([
+            'status' => 401,
+            'message' => 'Password anda belum berubah',
+        ]);
+    }
 
     // Periksa kecocokan password saat ini
     if (!Hash::check($currentPassword, $user->password)) {

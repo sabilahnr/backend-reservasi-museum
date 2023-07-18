@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class transaksi extends Model
+class   transaksi extends Model
 {
     use HasFactory;
     protected $table = 'transaksis';
@@ -18,6 +18,7 @@ class transaksi extends Model
         'tanggal',
         'email',
         'pembayaran',
+        'channel_pembayaran',
         'kode_tiket',
         'id_admin',
         'kehadiran',
@@ -28,7 +29,7 @@ class transaksi extends Model
     ];
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
+        return $this->belongsTo(kategori::class, 'id_kategori');
     }
     
     

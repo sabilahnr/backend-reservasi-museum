@@ -84,13 +84,14 @@ class ControllerTransaksi extends Controller
         $transaksi->tanggal = $request->input('tanggal'); 
         $transaksi->email = $request->input('email'); 
         $transaksi->pembayaran = $request->input('pembayaran'); 
-        if($request->input('harga_awal') == 0) {
+        if($request->input('total_harga') == 0) {
             $transaksi->tanggal_pembayaran = Carbon::now();
         }
         $transaksi->status = $request->input('status'); 
         $transaksi->save();
 
-        $museum =  DB::table('museum')->find($request->input('id_kategori'));
+        $kategori =  DB::table('kategori')->find($request->input('id_kategori'));
+        $museum =  DB::table('museum')->find($kategori->id_museum);
         
         $kode_awal = preg_split("/\s+/", $museum->nama_museum);
         $id_musuem = $museum->id;
@@ -131,7 +132,8 @@ class ControllerTransaksi extends Controller
                 Kategori = {$request->input('kategori')} <br>
                 Tanggal = {$request->input('tanggal')} <br>
                 Email = {$request->input('email')} <br>
-                Harga = {$request->input('harga_awal')}<br>
+                Harga = {$request->input('total_harga')}<br>
+                Status Pembayaran = {$transaksi->status}<br>
                 Pembayaran = {$request->input('pembayaran')} <br><br>
             Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
             Kode TIket anda adalah Anda: {$transaksi->kode_tiket}<br><br>
@@ -185,7 +187,8 @@ class ControllerTransaksi extends Controller
     //                 ->where('total_harga', '<>', '0')
     //                 ->get();
     
-    $pemasukan = transaksi::where('status', 'Lunas')
+    $pemasukan = transaksi::with('kategori.museum')
+    ->where('status', 'Lunas')
                     ->where('total_harga', '<>', '0')
                     ->get();
 
@@ -254,7 +257,7 @@ class ControllerTransaksi extends Controller
         //                 ->join('museum','museum.id','=','kategori.id_museum')
         //                 ->get();
     
-        $data = kategori::with('museum')->get();
+        $data = kategori::with('museum')->where('kategori.id', $id_category)->get();
     
         if($data){
             return response()->json([
@@ -336,14 +339,11 @@ class ControllerTransaksi extends Controller
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
 
-        if ($idMuseum) {
+        if ($idMuseum === 'Semua Museum'||$idMuseum === null) {
 
-            // Inisialisasi objek export dengan filter nama museum dan range waktu
-            $export = new PemasukanExport($idMuseum, $startDateTime, $endDateTime);
-        } else {
-   
-            // Inisialisasi objek export tanpa filter nama museum, namun dengan range waktu
             $export = new PemasukanExport(null, $startDateTime, $endDateTime);
+        } else {            
+            $export = new PemasukanExport($idMuseum, $startDateTime, $endDateTime);
         }
         
         return Excel::download($export, 'pengunjung.xlsx');
@@ -361,7 +361,7 @@ class ControllerTransaksi extends Controller
         $kategori = $request['kategori'];
         $phone = $request['phone'];
         $kota = $request['kota'];
-        $harga_awal = $request['harga_awal'];
+        $total_harga = $request['total_harga'];
         $metode = $request['metode'];
 
        
@@ -374,10 +374,11 @@ class ControllerTransaksi extends Controller
         $transaksi->id_kategori = $request->input('id_kategori'); 
         $transaksi->tanggal = $request->input('tanggal'); 
         $transaksi->email = $request->input('email'); 
-        $transaksi->total_harga = $request->input('harga_awal');
+        $transaksi->total_harga = $request->input('total_harga');
+        $transaksi->channel_pembayaran = $request->input('metode'); 
         $transaksi->pembayaran = 'non-tunai'; 
         $transaksi->status = 'belom lunas'; 
-        $transaksi-> invoice ="pembayaran_".rand(20,200);
+        $transaksi->invoice ="pembayaran_".rand(20,200);
         $transaksi->save();
 
         
@@ -389,7 +390,7 @@ class ControllerTransaksi extends Controller
         foreach ($kode_awal as $w) {
             $hasil .= mb_substr($w, 0, 1);
         }
-        $transaksi->kode_tiket = $hasil."-".$id_musuem.$request->input('id_kategori').$request->jumlah."-".str_replace("-", "", $request->tanggal)."-".$transaksi->id;
+        $transaksi->kode_tiket = $hasil.$id_musuem.$transaksi->id;
         $transaksi->save();
 
         
@@ -404,7 +405,7 @@ class ControllerTransaksi extends Controller
         $data = [
                     'method'         => $metode,
                     'merchant_ref'   => $merchantRef,
-                    'amount'         => $harga_awal,
+                    'amount'         => $total_harga,
                     'customer_name'  => $nama,
                     'customer_email' => $email,
                     'customer_phone' => $phone,
@@ -412,13 +413,13 @@ class ControllerTransaksi extends Controller
                         [
                             'sku'         => 'FB-06',
                             'name'        => $museum,
-                            'price'       => $harga_awal,
+                            'price'       => $total_harga,
                             'quantity'    => 1,
                         ]
                     ],
                     'return_url'   => 'https://museumsolo.com/',
                     'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-                    'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$harga_awal, $privateKey)
+                    'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$total_harga, $privateKey)
                 ];
         
         
@@ -511,7 +512,7 @@ class ControllerTransaksi extends Controller
 
         if ($data->is_closed_payment === 1) {
             $invoice = transaksi::where('invoice', $data->merchant_ref)
-                ->where('status', '=', 'pending')
+                ->where('status', '=', 'belom lunas')
                 ->first();
                 
                  
@@ -531,6 +532,7 @@ class ControllerTransaksi extends Controller
             switch ($status) {
                 case 'PAID':
                     $invoice->update(['status' => 'Lunas']);
+                    $invoice->update(['tanggal_pembayaran' => Carbon::now()]);
 
                   
                     $apiKey = $_ENV['SENDINBLUE_API_KEY'];
@@ -563,7 +565,8 @@ class ControllerTransaksi extends Controller
                         kategori = {$invoice->kategori} <br>
                         tanggal = {$invoice->tanggal} <br>
                         email = {$invoice->email} <br>
-                        harga_awal = {$invoice->total_harga}<br>
+                        Harga = {$invoice->total_harga}<br>
+                        Status Pembayaran = {$invoice->status}<br>
                         pembayaran = {$invoice->pembayaran} <br><br>
                     Terima kasih atas reservasi anda. Jika Anda memiliki pertanyaan atau membutuhkan bantuan, jangan ragu untuk menghubungi tim IT dukungan kami.<br><br>
                     Kode TIket anda adalah Anda: {$invoice->kode_tiket}<br><br>

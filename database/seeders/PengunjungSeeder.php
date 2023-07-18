@@ -30,7 +30,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => '1',
-            'kode_tiket' => 'MRP-28-11-2022-1'
+            'kode_tiket' => 'MRP21'
             ],[
             'id' => 2,
             'nama' => 'Abdul',
@@ -45,7 +45,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-28-11-2022-2'
+            'kode_tiket' => 'MRP22'
             ],[
             'id' => 3,
             'nama' => 'Shinta',
@@ -60,7 +60,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-27-11-2022-3'
+            'kode_tiket' => 'MRP23'
         ],[
 
             'id' => 4,
@@ -76,7 +76,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => 'Samuel',
-            'kode_tiket' => 'MKN-29-11-2022-4'
+            'kode_tiket' => 'MKN14'
         ],[
             'id' => 5,
             'nama' => 'Malikha',
@@ -91,7 +91,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-27-11-2022-5'
+            'kode_tiket' => 'MRP25'
         ],[
             'id' => 6,
             'nama' => 'Ahmad',
@@ -107,7 +107,7 @@ class PengunjungSeeder extends Seeder
             'kehadiran' => "Hadir",
             'pembayaran' => 'tunai',
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKN-28-11-2022-6'
+            'kode_tiket' => 'MKN16'
         ],[
             'id' => 7,
             'nama' => 'Islahnia Gadis',
@@ -122,7 +122,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKN-06-12-2022-7'
+            'kode_tiket' => 'MKN17'
         ],[
             'id' => 8,
             'nama' => 'Bima',
@@ -137,7 +137,7 @@ class PengunjungSeeder extends Seeder
             'pembayaran' => 'tunai',
             'id_admin' => null,
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKN-06-12-2022-8'
+            'kode_tiket' => 'MKN18'
         ],[
             'id' => 9,
             'nama' => 'Adibah',
@@ -151,7 +151,7 @@ class PengunjungSeeder extends Seeder
             'pembayaran' => 'tunai',
             'id_admin' => null,
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKN-03-12-2022-9'
+            'kode_tiket' => 'MKN19'
         ],[
             'id' => 10,
             'nama' => 'Angga',
@@ -165,7 +165,7 @@ class PengunjungSeeder extends Seeder
             'pembayaran' => 'tunai',
             'id_admin' => "Udin",
             'id_admin' => null,
-            'kode_tiket' => 'MKN-04-12-2022-10'
+            'kode_tiket' => 'MKN110'
         ],[
             'id' => 11,
             'nama' => 'Mala',
@@ -180,7 +180,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-03-12-2022-11'
+            'kode_tiket' => 'MRP211'
         ],[
             'id' => 12,
             'nama' => 'Steven',
@@ -196,7 +196,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-01-07-2023-12'
+            'kode_tiket' => 'MRP212'
         ],[
             'id' => 13,
             'nama' => 'Soleh',
@@ -210,7 +210,7 @@ class PengunjungSeeder extends Seeder
             'pembayaran' => 'tunai',
             'id_admin' => "Udin",
             'id_admin' => null,
-            'kode_tiket' => 'MKN-06-01-2023-13'
+            'kode_tiket' => 'MKN113'
         ],[
             'id' => 14,
             'nama' => 'Hayati',
@@ -226,7 +226,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-04-01-2023-14'
+            'kode_tiket' => 'MRP214'
         ],[
             'id' => 15,
             'nama' => 'Lesty',
@@ -241,7 +241,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKM-04-01-2023-15'
+            'kode_tiket' => 'MKN115'
         ]
         ,[
             'id' => 16,
@@ -257,7 +257,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MRP-05-01-2023-16'
+            'kode_tiket' => 'MRP216'
         ]
         ,[
             'id' => 17,
@@ -274,7 +274,7 @@ class PengunjungSeeder extends Seeder
             'pembayaran' => 'tunai',
             'status' => 'Lunas',
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKM-04-04-2023-15'
+            'kode_tiket' => 'MKN117'
         ]
         ,[
             'id' => 18,
@@ -291,7 +291,7 @@ class PengunjungSeeder extends Seeder
             'status' => 'Lunas',
             'kehadiran' => "Hadir",
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKM-04-02-2023-15'
+            'kode_tiket' => 'MKN118'
         ]
         ,[
             'id' => 19,
@@ -308,7 +308,7 @@ class PengunjungSeeder extends Seeder
             'kehadiran' => "Hadir",
             'status' => 'Lunas',
             'id_admin' => "Udin",
-            'kode_tiket' => 'MKM-04-03-2023-15'
+            'kode_tiket' => 'MKN119'
         ]
         ,[
             'id' => 20,
@@ -322,7 +322,7 @@ class PengunjungSeeder extends Seeder
             'email' => 'samuelstev0902@gmail.com',
             'pembayaran' => 'tunai',
             'id_admin' => null,
-            'kode_tiket' => 'MKM-04-03-2023-15'
+            'kode_tiket' => 'MKN120'
         ]
     ];
 
