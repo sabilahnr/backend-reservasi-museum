@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('kode_tiket')->nullable();
             $table->string('id_admin')->nullable();
             $table->string('kehadiran')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('belum lunas');
             $table->string('tanggal_pembayaran')->nullable();
             $table->string('tanggal_kehadiran')->nullable();
             $table->string('invoice')->nullable();

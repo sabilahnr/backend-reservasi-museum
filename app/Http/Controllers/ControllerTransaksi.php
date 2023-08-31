@@ -39,6 +39,7 @@ class ControllerTransaksi extends Controller
         'negara'=>'nullable|max:191',
         'phone'=>'required|min:10|max:13',
         'jumlah'=>'required|max:191',
+        'email'=>'required|max:191',
         'tanggal'=>'required|max:191',       
          
     ],[
@@ -46,7 +47,7 @@ class ControllerTransaksi extends Controller
         'kota.required' => 'Kolom kota wajib diisi',
         'phone.required' => 'Kolom phone wajib diisi',
         'jumlah.required' => 'Kolom jumlah wajib diisi',
-        // 'foto.required' => 'Kolom Foto wajib diisi',
+        'jumlah.required' => 'Kolom Email wajib diisi',
     ]);
 
     if($validator->fails())
@@ -63,12 +64,6 @@ class ControllerTransaksi extends Controller
             'message'=>'Tervalidasi',
         ]);
     }
-
-    // return response()->json([
-    //             'status'=> 200,
-    //             'foto'=>$request->get('foto'),
-    //         ]);
-
 
    }
     public function store(Request $request)
@@ -149,14 +144,6 @@ class ControllerTransaksi extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-
-
-        
-        // $userEmail = $request->input('email');
-        // $confirmationEmail = new ConfirmationEmail($userData);
-
-        // Mail1::to($userEmail)->send($confirmationEmail);
-
         return response()->json([
             'status' => 200,
             'kode_tiket' => $transaksi->kode_tiket,
@@ -166,10 +153,6 @@ class ControllerTransaksi extends Controller
 
     public function show()
     {
-        // $user = User::where('id' , Auth::id())->first();
-        // $user->getRoleNames();
-        
-       
         $transaksi = transaksi::with('kategori.museum')->get();
 
         return response()->json([
@@ -310,23 +293,15 @@ class ControllerTransaksi extends Controller
         $startDate = $request->input('start_date', Carbon::now()->subMonth());
         $endDate = $request->input('end_date', Carbon::now()); 
         
-        
-    
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
         
         if ($idMuseum) {
-
-            // Inisialisasi objek export dengan filter nama museum dan range waktu
             $export = new PengunjungExport($idMuseum, $startDateTime, $endDateTime);
         } else {
    
-            // Inisialisasi objek export tanpa filter nama museum, namun dengan range waktu
             $export = new PengunjungExport(null, $startDateTime, $endDateTime);
         }
-    
-        // $export = new PemasukanExport($museumName, $startDateTime, $endDateTime);
-    
         return Excel::download($export, 'pengunjung.xlsx');
     }
 

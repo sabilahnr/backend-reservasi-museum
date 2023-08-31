@@ -25,7 +25,6 @@ class KategoriController extends Controller
 
     public function show_kategori()
     {
-        // $kategori = kategori::all();
         $kategori = kategori::select('kategori.*','museum.nama_museum')
                         ->join('museum','museum.id','=','kategori.id_museum')
                         ->get();
@@ -39,11 +38,8 @@ class KategoriController extends Controller
     public function store(Request $request) 
     {
        
-        // $faq = museum::find($id_faq);
         $nama_kategori = kategori::where('id_museum',$request->id_museum)->where('nama_kategori',$request->kategori)->first();
-        // $nama_kategori = kategori::where('nama_kategori',$request->kategori)->first();
         
-
         if($nama_kategori !== null)
         {
             return response()->json([
@@ -118,7 +114,6 @@ class KategoriController extends Controller
 
     public function update(Request $request,$id_kategori)
     {
-        // $harga = harga::select('harga.*')->where('id', $id_category)->get();
         $kategori = kategori::find($id_kategori);
 
         $kategori->nama_kategori = $request->nama_kategori;
